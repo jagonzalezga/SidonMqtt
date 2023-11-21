@@ -33,8 +33,8 @@
 
 // API v1 json desde String
 
-bool security = false;
-const char *dataType = "application/json";
+bool security = true;
+const char *dataType = "application/json";//es para retornar la respuesta json 
 
 // -------------------------------------------------------------------
 // Parametros de configuración Index
@@ -202,7 +202,7 @@ void handleApiPostWiFi(AsyncWebServerRequest *request, uint8_t *data, size_t len
         strlcpy(wifi_gateway, s.c_str(), sizeof(wifi_gateway));
         s = "";
     }             
-    // Subned
+    // Subnet
     if (doc["wifi_subnet"] != ""){
         s = doc["wifi_subnet"].as<String>();
         s.trim();
@@ -578,6 +578,7 @@ void handleApiPostRestart(AsyncWebServerRequest *request){
         if (!request->authenticate(device_user, device_password))
             return request->requestAuthentication();
     } 
+    
     // Retornamos la respuesta
     request->send(200, dataType, "{ \"restart\": true }");
     // Reiniciar el ESP32

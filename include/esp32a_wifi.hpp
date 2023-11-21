@@ -26,8 +26,7 @@ unsigned long previousMillisAP = 0;//temporizacion modo AP
 unsigned long intervalWIFI = 30000; // 30 Segundos
 
 // e.j http://adminesp32.local
-const char *esp_hostname = device_name;
-
+const char *esp_hostname = device_id;
 // -------------------------------------------------------------------
 // Declaración de funciones
 // -------------------------------------------------------------------

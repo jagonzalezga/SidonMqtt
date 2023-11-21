@@ -67,6 +67,7 @@ int             ap_connect;                             // Número de conexiones
 // -------------------------------------------------------------------
 // Zona configuración MQTT 
 // ------------------------------------------------------------------- 
+
 boolean         mqtt_enable;                            // Habilitar MQTT Broker true / false
 char            mqtt_server[39];                        // Servidor del MQTT Broker
 int             mqtt_port;                              // Puerto servidor MQTT Broker 1883 / 8883
@@ -83,6 +84,8 @@ boolean         mqtt_willRetain;                        // Will mensaje retenido
 boolean         mqtt_time_send;                         // Habilitar en envio de datos
 int             mqtt_time_interval;                     // Tiempo de envio por MQTT en segundos
 boolean         mqtt_status_send;                       // Habilitar en envio de estados
+char            mqtt_topic[150];                         //esta linea se agrego para el topic al que se conectara al rabbit de carlos
+//String          mqtt_topic;
 // -------------------------------------------------------------------
 // Zona EEPROM para contador de reinicios
 // -------------------------------------------------------------------

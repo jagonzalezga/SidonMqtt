@@ -103,9 +103,13 @@ String extractNumbers(String e){
 // Crear un path para los Topicos en MQTT
 // emqx/ESP329B1C52100C3D/#   +/# = > usuario/id/# => emqx/ESP329B1C52100C3D/status = true/false
 // -------------------------------------------------------------------
+
 String PathMqttTopic(String topic){
-    return String(String(mqtt_user)+"/"+topic+"/"+String(mqtt_id));
+    //return String(String(mqtt_user)+"/"+topic+"/"+String(mqtt_id));//prototipo de funcion inicial
+    Serial.println(mqtt_topic);
+    return String(String(mqtt_topic)+"/"+topic+"/"+"status");//prototipo de funcion inicial
 }
+
 String PathMqttTopic_sub(String topic){
     return String(String(mqtt_user)+"/"+topic);
 }
@@ -269,7 +273,7 @@ String EncryptionType(int encryptionType) {
 // Función para reiniciar el dispositivo Global -> API, MQTT, WS
 // -------------------------------------------------------------------
 void restart(String origin){
-    log("INFO", "Dispositivo reiniciado desde: "+origin);
+    log("INFO", "Dispositivo reiniciado desde: " + origin );
     Serial.flush();
     ESP.restart();
 }

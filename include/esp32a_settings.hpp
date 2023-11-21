@@ -65,6 +65,7 @@ boolean settingsRead(){
         // -------------------------------------------------------------------
         // MQTT settings.json
         // -------------------------------------------------------------------
+        strlcpy(mqtt_topic, jsonSettings["mqtt"]["mqtt_topic"], sizeof(mqtt_topic));
         mqtt_enable = jsonSettings["mqtt"]["mqtt_enable"];
         strlcpy(mqtt_server, jsonSettings["mqtt"]["mqtt_server"], sizeof(mqtt_server));
         mqtt_port = jsonSettings["mqtt"]["mqtt_port"];
@@ -110,13 +111,13 @@ void settingsReset(){
     strlcpy(device_id, DeviceID().c_str(), sizeof(device_id));   // ESP32DC15B80C703E
     strlcpy(device_name, extractNumbers(DeviceID()).c_str(), sizeof(device_name));
     strlcpy(device_user, "admin", sizeof(device_user)); 
-    strlcpy(device_password, "admin", sizeof(device_password)); 
+    strlcpy(device_password, "98374252", sizeof(device_password)); 
     // -------------------------------------------------------------------
     // WIFI Cliente settings.json
     // -------------------------------------------------------------------
     wifi_mode = true; // false = AP true = cliente
     strlcpy(wifi_ssid, "Ecosat WiFi", sizeof(wifi_ssid));
-    strlcpy(wifi_password, "wifi.d3v3l0p3rs2023#", sizeof(wifi_password));
+    strlcpy(wifi_password, "wifi.1ng3n13r142023#", sizeof(wifi_password));
     wifi_ip_static = false; // false dhcp true fijo
     strlcpy(wifi_ipv4, "192.168.30.150", sizeof(wifi_ipv4));
     strlcpy(wifi_subnet, "255.255.255.0", sizeof(wifi_subnet));
@@ -135,11 +136,12 @@ void settingsReset(){
     // MQTT settings.json
     // -------------------------------------------------------------------
     mqtt_enable = true;
-    strlcpy(mqtt_server, "20.25.168.15", sizeof(mqtt_server));
+    strlcpy(mqtt_server, "20.25.168.15" , sizeof(mqtt_server));
     mqtt_port = 1883;//puerto del broker mqtt
     mqtt_retain = false;
     mqtt_qos = 1;//quiality of service
     strlcpy(mqtt_id, DeviceID().c_str(), sizeof(mqtt_id));
+    strlcpy(mqtt_topic,"C2B59262-D995-45CD-A054-20CF61E1EDD7", sizeof(mqtt_topic));
     strlcpy(mqtt_user, "admin", sizeof(mqtt_user));
     strlcpy(mqtt_password, "admin", sizeof(mqtt_password));
     mqtt_clean_sessions = true;
@@ -207,6 +209,7 @@ boolean settingsSave(){
         // MQTT settings.json
         // -------------------------------------------------------------------
         JsonObject mqttObj = jsonSettings.createNestedObject("mqtt");
+        mqttObj["mqtt_topic"] = mqtt_topic;
         mqttObj["mqtt_enable"] = mqtt_enable;
         mqttObj["mqtt_server"] = mqtt_server;
         mqttObj["mqtt_port"] = mqtt_port;
