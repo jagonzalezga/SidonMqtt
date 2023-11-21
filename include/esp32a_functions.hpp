@@ -107,7 +107,7 @@ String extractNumbers(String e){
 String PathMqttTopic(String topic){
     //return String(String(mqtt_user)+"/"+topic+"/"+String(mqtt_id));//prototipo de funcion inicial
     Serial.println(mqtt_topic);
-    return String(String(mqtt_topic)+"/"+topic+"/"+"status");//prototipo de funcion inicial
+    return String(String(mqtt_topic)+"/"+"sidon"+"/"+topic);//prototipo de funcion inicial
 }
 
 String PathMqttTopic_sub(String topic){

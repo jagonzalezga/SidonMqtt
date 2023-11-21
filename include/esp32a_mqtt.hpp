@@ -189,7 +189,7 @@ else {
 // ------------------------------------------------------------------- 
 void mqtt_publish(){
     //String topic = PathMqttTopic("device");//prototipo de fucnion inicial
-    String topic = PathMqttTopic("sidon");//prototipo de funcion para la conexion con carlos
+    String topic = PathMqttTopic("status");//prototipo de funcion para la conexion con carlos
     log("MQTT", topic);
 
     mqtt_data = Json();

@@ -145,7 +145,7 @@ void settingsReset(){
     strlcpy(mqtt_user, "admin", sizeof(mqtt_user));
     strlcpy(mqtt_password, "admin", sizeof(mqtt_password));
     mqtt_clean_sessions = true;
-    strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
+    strlcpy(mqtt_willTopic, PathMqttTopic("error").c_str(), sizeof(mqtt_willTopic));
     strlcpy(mqtt_willMessage, "{\"connected\": false}", sizeof(mqtt_willMessage));
     mqtt_willQoS = 0;
     mqtt_willRetain = false;
