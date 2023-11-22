@@ -10,13 +10,13 @@ void initDisplay()
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))   // Address 0x3C for 128x32
     { 
         Serial.println(F("SSD1306 Falla en pantalla OLED"));
-        for (;;); // No continuar al siguiente proceso
     }
+    delay(2000);
+    //display.clearDisplay();
     display.display();
-    display.clearDisplay();
+    
 }
 
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void textDraw()
 {
@@ -70,7 +70,6 @@ void textDrawGeneric(char* top_,char* middle_,char* botton_)
     display.display();
 
 }
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void textDrawError()
 {
@@ -89,6 +88,4 @@ void textDrawError()
 
     display.display();
 }
-
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 

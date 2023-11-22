@@ -77,7 +77,8 @@ void setup() {
   ledcWrite(ledChannel, dim * 2.55); // dim => 0 - 100 
   // iniciar el wifi
   wifi_setup();
-
+  // iniciar la pantalla oled
+  initDisplay(); 
   // inicializar el servidor
   initServer();
 
@@ -87,7 +88,7 @@ void setup() {
   xTaskCreate(TaskMqttReconnect, "TaskMqttReconnect", 1024*6, NULL, 2, NULL);
   // LED MQTT Task
   xTaskCreate( TaskMQTTLed, "TaskMQTTLed", 2048, NULL, 1, NULL);
-  initDisplay();  
+ 
 
 }
 
