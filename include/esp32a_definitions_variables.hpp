@@ -108,8 +108,7 @@ int             dim;                                   // valor del dimmer a env
 // -------------------------------------------------------------------
 // Zona ADC
 // -------------------------------------------------------------------
-float constanteCorriente;//constante para calculo de corriente esto lo define el sensor en este caso se debe de instalar un sensor de 50 amperes
-// float ADC_0; //resistencia de deshielo
-// float ADC_1; //fase1 compresor
-// float ADC_2; //fase2 compresor
-// float ADC_3; //fase3 compresor
+float ADC_0; //resistencia de deshielo
+float ADC_1; //fase1 compresor
+float ADC_2; //fase2 compresor
+float ADC_3; //fase3 compresor
