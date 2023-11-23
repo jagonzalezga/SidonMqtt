@@ -8,7 +8,6 @@
  ;* Autor: Ing. ANDRE GONZALEZ
  ;* -------------------------------------------------------------------
 ;*/
-
 // -------------------------------------------------------------------
 // Declaración de funciones
 // -------------------------------------------------------------------
@@ -73,3 +72,37 @@ void TaskMQTTLed(void *pvParameters){
     }       
   }
 }
+
+// -------------------------------------------------------------------
+// Tarea ESTADOS
+// -------------------------------------------------------------------
+void TaskEstados(void *pvParameters){
+  (void) pvParameters;
+  
+
+  while(1){    
+    // Verifica cada pin para detectar cambios de estado
+    for (int i = 0; i < numPins; i++) 
+    {
+      vTaskDelay(100/portTICK_PERIOD_MS);
+      int currentState = digitalRead(Gpio[i]);
+
+      // Compara el estado actual con el estado anterior
+      if (currentState != lastState[i]) 
+      {
+        // Si hay un cambio, imprime en el monitor serial
+        Serial.print("Gpio ");
+        String pin_ = String(pin[i]);
+        Serial.print(pin_);
+        Serial.print(" cambió a estado ");
+        Serial.println(currentState);
+
+        // Actualiza el estado anterior
+        lastState[i] = currentState;
+        mqtt_publishEst(pin_,currentState);
+      }
+  } 
+  }
+}
+
+

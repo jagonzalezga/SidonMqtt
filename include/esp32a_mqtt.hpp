@@ -32,6 +32,7 @@ void callback(char *topic, byte *payload, unsigned int length);
 void mqtt_publish();
 String Json();
 void mqttloop();
+String JsonEST(String pin_,int currentState_);
 
 // -------------------------------------------------------------------
 // MQTT Connect
@@ -185,13 +186,21 @@ else {
 
 }
 // -------------------------------------------------------------------
-// Manejo de los Mensajes Salientes
+// Manejo de los Mensajes Salientes y mensajes de sensores de estado
 // ------------------------------------------------------------------- 
 void mqtt_publish(){
     String topic = PathMqttTopic("device");
     log("MQTT", topic);
 
     mqtt_data = Json();
+    mqttClient.publish(topic.c_str(), mqtt_data.c_str(), mqtt_retain);
+    mqtt_data = "";
+}
+void mqtt_publishEst(String pin, int currentState){
+    String topic = PathMqttTopic("EST");
+    log("MQTT", topic);
+
+    mqtt_data = JsonEST(pin,currentState);
     mqttClient.publish(topic.c_str(), mqtt_data.c_str(), mqtt_retain);
     mqtt_data = "";
 }
@@ -289,6 +298,19 @@ String Json(){
 	// dataObj["wifiQuality"]        = WiFi.status() == WL_CONNECTED ? getRSSIasQuality(WiFi.RSSI()) : 0;
     
     serializeJson(jsonDoc, response);
+    jsonDoc.clear();
+    return response;
+}
+// -------------------------------------------------------------------
+// Json encargado de generar el mensaje de sensores de estado
+// -------------------------------------------------------------------
+String JsonEST(String pin_,int currentState_){
+    String response;
+    DynamicJsonDocument jsonDoc(512);
+    jsonDoc["valor"] = currentState_;
+    jsonDoc["Gpio"]  = pin_;
+    serializeJson(jsonDoc, response);
+    Serial.println(response);
     jsonDoc.clear();
     return response;
 }

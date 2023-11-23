@@ -113,7 +113,8 @@ String PathMqttTopic_sub(String topic){
 // Definir Pines GPIO
 // -------------------------------------------------------------------
 void gpioDefine(){
-    initSensorEstados();//AQUI SE DAN DE ALTA LOS PINES DIGITALES PARA LOS SENSORES DE ESTADO
+    
+
     // PINES
     pinMode(WIFILED, OUTPUT);
     pinMode(MQTTLED, OUTPUT);

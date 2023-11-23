@@ -116,7 +116,7 @@ void settingsReset(){
     // -------------------------------------------------------------------
     wifi_mode = true; // false = AP true = cliente
     strlcpy(wifi_ssid, "Ecosat WiFi", sizeof(wifi_ssid));
-    strlcpy(wifi_password, "wifi.d3v3l0p3rs2023#", sizeof(wifi_password));
+    strlcpy(wifi_password, "wifi.1ng3n13r142023#", sizeof(wifi_password));
     wifi_ip_static = false; // false dhcp true fijo
     strlcpy(wifi_ipv4, "192.168.30.150", sizeof(wifi_ipv4));
     strlcpy(wifi_subnet, "255.255.255.0", sizeof(wifi_subnet));
@@ -135,7 +135,7 @@ void settingsReset(){
     // MQTT settings.json
     // -------------------------------------------------------------------
     mqtt_enable = true;
-    strlcpy(mqtt_server, "20.25.168.15", sizeof(mqtt_server));
+    strlcpy(mqtt_server, "192.168.200.126", sizeof(mqtt_server));
     mqtt_port = 1883;//puerto del broker mqtt
     mqtt_retain = false;
     mqtt_qos = 1;//quiality of service

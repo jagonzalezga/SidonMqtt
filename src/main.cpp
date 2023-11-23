@@ -87,7 +87,10 @@ void setup() {
   xTaskCreate(TaskMqttReconnect, "TaskMqttReconnect", 1024*6, NULL, 2, NULL);
   // LED MQTT Task
   xTaskCreate( TaskMQTTLed, "TaskMQTTLed", 2048, NULL, 1, NULL);
-  initDisplay();  
+  // SENSORES DE ESTADOS TASK
+  xTaskCreate( TaskEstados, "TaskEstados", 2048, NULL, 1, NULL);
+  initDisplay();
+  initSensorEstados();//AQUI SE DAN DE ALTA LOS PINES DIGITALES PARA LOS SENSORES DE ESTADO  
 
 }
 
