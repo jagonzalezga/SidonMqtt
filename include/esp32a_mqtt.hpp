@@ -306,9 +306,15 @@ String Json(){
 // -------------------------------------------------------------------
 String JsonEST(String pin_,int currentState_){
     String response;
-    DynamicJsonDocument jsonDoc(512);
-    jsonDoc["valor"] = currentState_;
-    jsonDoc["Gpio"]  = pin_;
+    DynamicJsonDocument jsonDoc(1024);
+    jsonDoc["CodigoMDC"]          = DeviceID();//numero de serie del sidon 
+    jsonDoc["VersionFw"]    = device_fw_version;//FECHA DE CREACION/MODIFICACION DEL FIRMWARE
+    jsonDoc["VersionHw"]    = String(device_hw_version);//VERSION DEL HARDWARE
+    jsonDoc["tiempoActivo"]   = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
+    JsonArray dataObj = jsonDoc.createNestedArray("lecturas");
+    JsonObject device1            = dataObj.createNestedObject();
+    device1["Valor"] = currentState_;
+    device1["GPIO"]  = pin_;
     serializeJson(jsonDoc, response);
     Serial.println(response);
     jsonDoc.clear();

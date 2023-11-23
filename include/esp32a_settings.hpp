@@ -141,7 +141,7 @@ void settingsReset(){
     mqtt_qos = 1;//quiality of service
     strlcpy(mqtt_id, DeviceID().c_str(), sizeof(mqtt_id));
     strlcpy(mqtt_user, "admin", sizeof(mqtt_user));
-    strlcpy(mqtt_password, "admin", sizeof(mqtt_password));
+    strlcpy(mqtt_password, "98374252", sizeof(mqtt_password));
     mqtt_clean_sessions = true;
     strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
     strlcpy(mqtt_willMessage, "{\"connected\": false}", sizeof(mqtt_willMessage));
