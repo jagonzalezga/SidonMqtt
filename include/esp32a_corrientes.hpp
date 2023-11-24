@@ -1,13 +1,19 @@
+/* -------------------------------------------------------------------
+ ;* ECOSAT- ECOSAT 2023
+ ;* Correo: agonzalez@ecosat.com.mx
+ ;* Plataforma: SIDON 2.2
+ ;* Framework:  Arduino - Platformio - VSC
+ ;* Proyecto: Panel Administrativo 
+ ;* Nombre: SIDON 2.0
+ ;* Autor: Ing. ANDRE GONZALEZ
+ ;* -------------------------------------------------------------------
+;*/
 Adafruit_ADS1115 ads;
 
 const float Valorminin          = 0.0;//Valor minimo de entrada 
 const float Valormaxin          = 26666;//ESTA ES PARA UNA GANANCIA DE 0 A 5
 const float ValorminCorriente   = 0.0;//Valor minimo de corriente
-const float constanteCorriente  = 50;//constante para calculo de corriente esto lo define el sensor en este caso se debe de instalar un sensor de 50 amperes
-//const int   maxSamplers         = 8;//Cantidad maxima de sampleos para el calculo del promedio
-//int         countSamplers       = 0;//Declaracion e inicializacion del a variable que lleva la cuenta de los sampleos
-//int         lastRegister        = 0;
-//int         averageSamplers     = 0;
+
 String      Ax[4]               = {"A0", "A1", "A2", "A3"};//Pines de adc
 String      output;
 // Definir un array para almacenar los valores de corriente

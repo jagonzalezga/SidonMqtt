@@ -1,4 +1,13 @@
-
+/* -------------------------------------------------------------------
+ ;* ECOSAT- ECOSAT 2023
+ ;* Correo: agonzalez@ecosat.com.mx
+ ;* Plataforma: SIDON 2.2
+ ;* Framework:  Arduino - Platformio - VSC
+ ;* Proyecto: Panel Administrativo 
+ ;* Nombre: SIDON 2.0
+ ;* Autor: Ing. ANDRE GONZALEZ
+ ;* -------------------------------------------------------------------
+;*/
 DeviceAddress deviceAddress; // Esta variable almacenará la dirección MAC de cada dispositivo.
 int deviceCount = 0; // Variable para contar los dispositivos encontrados.
 int deviceNum   = 0;//variable que enumera los dispositivon en el serial

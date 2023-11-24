@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2023
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.7
+ ;* Plataforma: SIDON 2.2
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -33,7 +33,7 @@ String device_fw_version = ESCAPEQUOTE(BUILD_TAG);
 // -------------------------------------------------------------------
 // Version de Hardware y Fabricante
 // -------------------------------------------------------------------
-#define device_hw_version   "2.7"    // Versión del hardware
+#define device_hw_version   "2.2"         // Versión del hardware
 #define device_manufacturer "ADM"        // Fabricante
 // -------------------------------------------------------------------
 // Zona configuración Dispositivo
@@ -108,7 +108,4 @@ int             dim;                                   // valor del dimmer a env
 // -------------------------------------------------------------------
 // Zona ADC
 // -------------------------------------------------------------------
-float ADC_0; //resistencia de deshielo
-float ADC_1; //fase1 compresor
-float ADC_2; //fase2 compresor
-float ADC_3; //fase3 compresor
+float constanteCorriente;                              //constante para calculo de corriente esto lo define el sensor en este caso se debe de instalar un sensor de 50 amperes
