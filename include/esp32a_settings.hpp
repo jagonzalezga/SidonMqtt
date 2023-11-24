@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2023
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.7
+ ;* Plataforma: SIDON 2.2
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -90,6 +90,10 @@ boolean settingsRead(){
         // Dimmer settings.json
         // -------------------------------------------------------------------
         dim = jsonSettings["dimmer"]["dim_value"];
+        // -------------------------------------------------------------------
+        // constante corriente settings.json
+        // -------------------------------------------------------------------
+        constanteCorriente = jsonSettings["constantecorriente"]["constante"];    
         // cerrar el archivo
         file.close();
         log("INFO", "Lectura de las configuraciones correctamente");
@@ -159,6 +163,8 @@ void settingsReset(){
     // Dimmer settings.json
     // -------------------------------------------------------------------
     dim = 0;
+    constanteCorriente  = 50;//constante para calculo de corriente esto lo define el sensor en este caso se debe de instalar un sensor de 50 amperes
+
 
     log("INFO","Se reiniciaron todos los valores por defecto");  
 }
@@ -234,6 +240,12 @@ boolean settingsSave(){
         // -------------------------------------------------------------------
         JsonObject dimmerObj = jsonSettings.createNestedObject("dimmer");
         dimmerObj["dim_value"] = dim;
+        // -------------------------------------------------------------------
+        // constantecorriente settings.json
+        // -------------------------------------------------------------------
+        JsonObject currentObj = jsonSettings.createNestedObject("constantecorriente");
+        currentObj["constante"] =  constanteCorriente;
+       
         
         jsonSettings["file_version"] = "3.0.0";
 

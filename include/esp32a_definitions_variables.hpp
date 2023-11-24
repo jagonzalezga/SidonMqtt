@@ -108,7 +108,4 @@ int             dim;                                   // valor del dimmer a env
 // -------------------------------------------------------------------
 // Zona ADC
 // -------------------------------------------------------------------
-float ADC_0; //resistencia de deshielo
-float ADC_1; //fase1 compresor
-float ADC_2; //fase2 compresor
-float ADC_3; //fase3 compresor
+float constanteCorriente;
