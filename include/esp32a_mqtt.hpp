@@ -134,7 +134,7 @@ if (doc["command"] == "getStatus")
         {  //Comprueba si devices contiene el mismo DeviceID que el dispositivo o Comprueba si "devices" contiene solo un elemento con valor "*"
             if ((device.as<String>() == DeviceID()) || (devices.size() == 1 && devices[0] == "*")) {
                 // Realiza la acción que deseas cuando se encuentra una coincidencia
-                Serial.println("Se encontró una coincidencia con deviceid.");
+                Serial.println("Se encontró una coincidencia con  el deviceid.");
                 // Puedes realizar la acción deseada aquí
                 mqtt_publish();
             }
@@ -144,8 +144,33 @@ if (doc["command"] == "getStatus")
     {
         Serial.println("No se encontró la clave 'devices' en el JSON.");
     }
-} 
-else {
+}
+else if (doc["command"] == "restart")
+{
+    // Realiza la acción que deseas cuando el comando es "getStatus"
+    Serial.println("Comando restart recibido");
+    // Verifica si el JSON contiene la clave "devices"
+    if (doc.containsKey("devices")) 
+    {
+        JsonArray devices = doc["devices"].as<JsonArray>();
+        for (const JsonVariant& device : devices) 
+        {  //Comprueba si devices contiene el mismo DeviceID que el dispositivo o Comprueba si "devices" contiene solo un elemento con valor "*"
+            if ((device.as<String>() == DeviceID()) || (devices.size() == 1 && devices[0] == "*")) {
+                // Realiza la acción que deseas cuando se encuentra una coincidencia
+                Serial.println("Se encontró una coincidencia con  el deviceid.");
+                Serial.println("Reseteando sidon");
+                vTaskDelay(3000/portTICK_PERIOD_MS);
+                ESP.restart();
+            }
+        }
+    }
+    else 
+    {
+        Serial.println("No se encontró la clave 'devices' en el JSON.");
+    }
+}
+else 
+{
     Serial.println("Comando no válido.");
 }
  // Limpia el documento JSON si es necesario

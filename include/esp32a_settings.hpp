@@ -135,7 +135,7 @@ void settingsReset(){
     // MQTT settings.json
     // -------------------------------------------------------------------
     mqtt_enable = true;
-    strlcpy(mqtt_server, "192.168.200.126", sizeof(mqtt_server));
+    strlcpy(mqtt_server, "192.168.200.5", sizeof(mqtt_server));
     mqtt_port = 1883;//puerto del broker mqtt
     mqtt_retain = false;
     mqtt_qos = 1;//quiality of service
