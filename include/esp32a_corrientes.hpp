@@ -23,9 +23,14 @@ static int currentIndex = 0;
 
 void initADS()
 {
-        Serial.print("INICIO CORRIENTES");
+
+        log("INFO", "INICIO CORRIENTES");
         ads.setGain(GAIN_TWOTHIRDS);  // 2/3x gain +/- 6.144V  1 bit = 3mV      0.1875mV (default)
-        ads.begin();
+        if (!ads.begin()) 
+        {
+            log("Error", "ADC no conectado");
+            statusADC = false;
+        }
 }
 
 void checkInfoCor(String Ax,float value)

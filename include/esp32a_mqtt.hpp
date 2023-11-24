@@ -236,7 +236,11 @@ String Json(){
     String response;
     DynamicJsonDocument jsonDoc(3000);
     GetTemperature();
-    getCorrientes();
+    if(statusADC)//si no detecta el adc no realiza la funcion de temperaturas
+    {
+        getCorrientes();
+    }
+
     SensorEstados();
     // Crear JSON
     jsonDoc["CodigoMDC"]          = DeviceID();//numero de serie del sidon 
@@ -274,19 +278,22 @@ String Json(){
     JsonObject device7            = dataObj.createNestedObject();
     device7["Valor"] = temperaturesC[6];
     device7["GPIO"]  = macAddresses[6];
-    JsonObject device8            = dataObj.createNestedObject();
-    device8["Valor"] = corrienteArray[0];
-    device8["GPIO"]  = Ax[0];
-    JsonObject device9            = dataObj.createNestedObject();
-    device9["Valor"] = corrienteArray[1];
-    device9["GPIO"]  = Ax[1] ;
-    JsonObject device10            = dataObj.createNestedObject();
-    device10["Valor"] = corrienteArray[2];
-    device10["GPIO"]  = Ax[2];
-    JsonObject device11            = dataObj.createNestedObject();
-    device11["Valor"] = corrienteArray[3];
-    device11["GPIO"]  = Ax[3];
-    currentIndex = 0;//variable que se usa en la parte de corrientes 
+    if(statusADC)
+    {
+        JsonObject device8            = dataObj.createNestedObject();
+        device8["Valor"] = corrienteArray[0];
+        device8["GPIO"]  = Ax[0];
+        JsonObject device9            = dataObj.createNestedObject();
+        device9["Valor"] = corrienteArray[1];
+        device9["GPIO"]  = Ax[1] ;
+        JsonObject device10            = dataObj.createNestedObject();
+        device10["Valor"] = corrienteArray[2];
+        device10["GPIO"]  = Ax[2];
+        JsonObject device11            = dataObj.createNestedObject();
+        device11["Valor"] = corrienteArray[3];
+        device11["GPIO"]  = Ax[3];
+        currentIndex = 0;//variable que se usa en la parte de corrientes 
+    }
     JsonObject device12            = dataObj.createNestedObject();
     device12["Valor"] = valoresDigitales[0];
     device12["GPIO"]  = "SE1";

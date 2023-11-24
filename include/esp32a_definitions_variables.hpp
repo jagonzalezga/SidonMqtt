@@ -109,3 +109,4 @@ int             dim;                                   // valor del dimmer a env
 // Zona ADC
 // -------------------------------------------------------------------
 float constanteCorriente;                              //constante para calculo de corriente esto lo define el sensor en este caso se debe de instalar un sensor de 50 amperes
+bool  statusADC = true;
