@@ -58,20 +58,20 @@ void TaskMqttReconnect(void *pvParamenters){
 // -------------------------------------------------------------------
 // Tarea MQTT LED pestañeo
 // -------------------------------------------------------------------
-void TaskMQTTLed(void *pvParameters){
-  (void) pvParameters;
-  while(1){    
-    vTaskDelay(10/portTICK_PERIOD_MS);
-    if(mqtt_enable && mqttClient.connected()){
-      digitalWrite(MQTTLED, HIGH);
-      vTaskDelay(50/portTICK_PERIOD_MS);
-      digitalWrite(MQTTLED, LOW);
-      vTaskDelay(1000/portTICK_PERIOD_MS);              
-    }else{
-      digitalWrite(MQTTLED, LOW);
-    }       
-  }
-}
+// void TaskMQTTLed(void *pvParameters){
+//   (void) pvParameters;
+//   while(1){    
+//     vTaskDelay(10/portTICK_PERIOD_MS);
+//     if(mqtt_enable && mqttClient.connected()){
+//       digitalWrite(MQTTLED, HIGH);
+//       vTaskDelay(50/portTICK_PERIOD_MS);
+//       digitalWrite(MQTTLED, LOW);
+//       vTaskDelay(1000/portTICK_PERIOD_MS);              
+//     }else{
+//       digitalWrite(MQTTLED, LOW);
+//     }       
+//   }
+// }
 
 // -------------------------------------------------------------------
 // Tarea ESTADOS

@@ -8,9 +8,10 @@
  ;* Autor: Ing. ANDRE GONZALEZ
  ;* -------------------------------------------------------------------
 ;*/
-int Gpio[5] = {15, 13, 14, 16, 17};
-int valoresDigitales[5];
+int Gpio[5]   = {15   ,13   ,4   ,16   ,17   };
 String pin[5] = {"SE1","SE2","SE3","SE4","SE5"};
+int valoresDigitales[5];
+
 const int numPins = 5;
 int lastState[numPins];
 

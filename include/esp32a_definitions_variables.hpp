@@ -13,10 +13,10 @@
 // Definiciones
 // -------------------------------------------------------------------
 #define RELAY1  14                  // GPIO14 para salida de Relay 1
-#define RELAY2  4                   // GPIO4 para salida de Relay 2
-#define WIFILED 15                  // GPIO15 LED INDICADOR WIFI 
-#define MQTTLED 13                  // GPIO13 LED INDICADOR MQTT
-#define DIMMER  17                  // GPIO17 LED INDICADOR DIMMER
+#define RELAY2  25                   // GPIO4 para salida de Relay 2
+// #define WIFILED 15                  // GPIO15 LED INDICADOR WIFI 
+// #define MQTTLED 13                  // GPIO13 LED INDICADOR MQTT
+// #define DIMMER  17                  // GPIO17 LED INDICADOR DIMMER
 // -------------------------------------------------------------------
 // CALCULAR LA CAPACIDAD DEL JSON
 // Asistente ArduinoJson: https://arduinojson.org/v6/assistant/

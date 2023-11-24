@@ -116,19 +116,19 @@ void gpioDefine(){
     
 
     // PINES
-    pinMode(WIFILED, OUTPUT);
-    pinMode(MQTTLED, OUTPUT);
+    // pinMode(WIFILED, OUTPUT);
+    // pinMode(MQTTLED, OUTPUT);
     pinMode(RELAY1, OUTPUT);  
     pinMode(RELAY2, OUTPUT);
     // PWM
-    ledcSetup(ledChannel, freq, resolution);
-    ledcAttachPin(DIMMER, ledChannel);
+    // ledcSetup(ledChannel, freq, resolution);
+    // ledcAttachPin(DIMMER, ledChannel);
     // SET OFF LOS LEDS
-    setOffSingle(WIFILED);          // Apagar el led
-    setOffSingle(MQTTLED);          // Apagar el led
+    // setOffSingle(WIFILED);          // Apagar el led
+    // setOffSingle(MQTTLED);          // Apagar el led
     setOffSingle(RELAY1);           // Apagar el relay
     setOffSingle(RELAY2);           // Apagar el relay   
-    ledcWrite(ledChannel, 0);       // Poner el 0 el dimmer 255 
+    // ledcWrite(ledChannel, 0);       // Poner el 0 el dimmer 255 
 }
 // -------------------------------------------------------------------
 // Convierte un char a IP
