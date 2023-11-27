@@ -107,6 +107,12 @@ void initServer(){
     // -------------------------------------------------------------------
     server.on("/api/device/status", HTTP_GET, handleApiGetStatus);
     // -------------------------------------------------------------------
+    // Manejo de parámetros de corriente
+    // url: "/api/device/constantecorriente"
+    // Método: GET
+    // -------------------------------------------------------------------
+    server.on("/api/device/constantecorriente", HTTP_GET, handleApiGetconstantecorriente);
+    // -------------------------------------------------------------------
     // Manejo del reinicio
     // url: "/api/device/restart"
     // Método: POST
@@ -148,6 +154,12 @@ void initServer(){
         } 
         request->send(401, dataType, "{ \"session\": false, \"msg\": \"Sesión cerrada correctamente\"}");
     });
+    // -------------------------------------------------------------------
+    // constante de corriente
+    // url: /api/constantecorriente
+    // Método: POST
+    // -------------------------------------------------------------------
+    server.on("/api/device/constantecorriente", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPostconstantecorriente);
 
     // manejador de error 404
     server.onNotFound([](AsyncWebServerRequest *request) {

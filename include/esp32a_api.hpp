@@ -42,6 +42,7 @@ const char *dataType = "application/json";
 // Método: GET
 // -------------------------------------------------------------------
 void handleApiIndex(AsyncWebServerRequest *request){
+
     // agregar el usuario y contraseña
     if(security){
         if(!request->authenticate(device_user, device_password))
@@ -105,6 +106,26 @@ void handleApiIndex(AsyncWebServerRequest *request){
     request->addInterestingHeader("API ESP32 Server");
     request->send(200, dataType, json);
 
+}
+// -------------------------------------------------------------------
+// Parametros de configuración de constante de corriente
+// url: /api/constantecorriente
+// Método: GET
+// -------------------------------------------------------------------
+void handleApiGetconstantecorriente(AsyncWebServerRequest *request){
+    // agregar el usuario y contraseña
+    if(security){
+        if(!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    }
+
+    String json = "";
+    json = "{";
+    json += "\"constantecorriente\": \"" + String(constanteCorriente) + "\"";
+    json += "}";
+
+    request->addInterestingHeader("API SIDON Server");
+    request->send(200, dataType, json);
 }
 // -------------------------------------------------------------------
 // Leer parámetros de configuración WiFi
@@ -716,4 +737,27 @@ void handleApiPostDimmer(AsyncWebServerRequest *request, uint8_t *data, size_t l
 
     dimmer(bodyContent);
     request->send(200, dataType, "{ \"dimmer\": true, \"value\": \"" + String(dim) + "\" }");
+}
+// -------------------------------------------------------------------
+// Manejo de la constante de corriente
+// url: /api/device/constantecorriente
+// Método: POST
+// -------------------------------------------------------------------
+void handleApiPostconstantecorriente(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+    if (security){
+        if (!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    } 
+    // capturamos la data en string
+    String bodyContent = GetBodyContent(data, len);
+    // Validar que sea un JSON
+    StaticJsonDocument<384> doc;
+    DeserializationError error = deserializeJson(doc, bodyContent);
+    if (error){
+        request->send(400, dataType, "{ \"status\": \"Error de JSON enviado\" }");
+        return;
+    };
+
+    constanteCorriente = doc["constantecorriente"];
+    request->send(200, dataType, "{ \"Save\": true, \"value\": \"" + String(constanteCorriente) + "\" }");
 }
