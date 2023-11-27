@@ -135,7 +135,7 @@ void initServer(){
     // url: /api/device/relays
     // Método: POST
     // -------------------------------------------------------------------
-    server.on("/api/device/relays", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPostRelays);
+    // server.on("/api/device/relays", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPostRelays);
     // -------------------------------------------------------------------
     // Regulador Dimmer
     // url: /api/device/dimmer

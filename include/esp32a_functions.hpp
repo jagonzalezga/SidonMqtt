@@ -116,19 +116,19 @@ void gpioDefine(){
     
 
     // PINES
-    pinMode(WIFILED, OUTPUT);
-    pinMode(MQTTLED, OUTPUT);
-    pinMode(RELAY1, OUTPUT);  
-    pinMode(RELAY2, OUTPUT);
+    // pinMode(WIFILED, OUTPUT);
+    // pinMode(MQTTLED, OUTPUT);
+    // pinMode(RELAY1, OUTPUT);  
+    // pinMode(RELAY2, OUTPUT);
     // PWM
-    ledcSetup(ledChannel, freq, resolution);
-    ledcAttachPin(DIMMER, ledChannel);
+    // ledcSetup(ledChannel, freq, resolution);
+    // ledcAttachPin(DIMMER, ledChannel);
     // SET OFF LOS LEDS
-    setOffSingle(WIFILED);          // Apagar el led
-    setOffSingle(MQTTLED);          // Apagar el led
-    setOffSingle(RELAY1);           // Apagar el relay
-    setOffSingle(RELAY2);           // Apagar el relay   
-    ledcWrite(ledChannel, 0);       // Poner el 0 el dimmer 255 
+    // setOffSingle(WIFILED);          // Apagar el led
+    // setOffSingle(MQTTLED);          // Apagar el led
+    // setOffSingle(RELAY1);           // Apagar el relay
+    // setOffSingle(RELAY2);           // Apagar el relay   
+    // ledcWrite(ledChannel, 0);       // Poner el 0 el dimmer 255 
 }
 // -------------------------------------------------------------------
 // Convierte un char a IP
@@ -154,26 +154,26 @@ String ipStr(const IPAddress &ip){
 // ejemplo: {"protocol": "MQTT", "output": "RELAY1", "value": true }
 // ejemplo: {"protocol": "API", "output": "RELAY1", "value": true }
 // -------------------------------------------------------------------
-boolean OnOffRelays(String command){
+// boolean OnOffRelays(String command){
 
-    DynamicJsonDocument JsonCommand(320);
-    deserializeJson(JsonCommand, command); 
+//     DynamicJsonDocument JsonCommand(320);
+//     deserializeJson(JsonCommand, command); 
 
-    log("INFO", "Comando enviado desde: "+JsonCommand["protocol"].as<String>()+" <=> "+JsonCommand["output"].as<String>()+" <=> "+JsonCommand["value"].as<String>());
+//     log("INFO", "Comando enviado desde: "+JsonCommand["protocol"].as<String>()+" <=> "+JsonCommand["output"].as<String>()+" <=> "+JsonCommand["value"].as<String>());
 
-    if(JsonCommand["value"] == true){
-        digitalWrite(JsonCommand["output"] == "RELAY1" ? RELAY1 : RELAY2, HIGH);
-        JsonCommand["output"] == "RELAY1" ? RELAY1_STATUS = HIGH : RELAY2_STATUS = HIGH ;
-        return true;
-    }else if(JsonCommand["value"] == false ){
-        digitalWrite(JsonCommand["output"] == "RELAY1" ? RELAY1 : RELAY2, LOW);
-        JsonCommand["output"] == "RELAY1" ? RELAY1_STATUS = LOW : RELAY2_STATUS = LOW ;
-        return false;
-    }else{
-        log("WARNING", "Comando NO permitido");
-        return false;
-    }
-}
+//     if(JsonCommand["value"] == true){
+//         digitalWrite(JsonCommand["output"] == "RELAY1" ? RELAY1 : RELAY2, HIGH);
+//         JsonCommand["output"] == "RELAY1" ? RELAY1_STATUS = HIGH : RELAY2_STATUS = HIGH ;
+//         return true;
+//     }else if(JsonCommand["value"] == false ){
+//         digitalWrite(JsonCommand["output"] == "RELAY1" ? RELAY1 : RELAY2, LOW);
+//         JsonCommand["output"] == "RELAY1" ? RELAY1_STATUS = LOW : RELAY2_STATUS = LOW ;
+//         return false;
+//     }else{
+//         log("WARNING", "Comando NO permitido");
+//         return false;
+//     }
+// }
 // -------------------------------------------------------------------
 // Retorna segundos como "d:hh:mm:ss"
 // -------------------------------------------------------------------

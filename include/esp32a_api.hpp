@@ -690,31 +690,31 @@ void handleApiPostUser(AsyncWebServerRequest *request, uint8_t *data, size_t len
 // url: /api/device/relays
 // Método: POST
 // -------------------------------------------------------------------
-void handleApiPostRelays(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-    if (security){
-        if (!request->authenticate(device_user, device_password))
-            return request->requestAuthentication();
-    } 
+// void handleApiPostRelays(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+//     if (security){
+//         if (!request->authenticate(device_user, device_password))
+//             return request->requestAuthentication();
+//     } 
 
-    // capturamos la data en string
-    String bodyContent = GetBodyContent(data, len);
-    // Validar que sea un JSON
-    StaticJsonDocument<384> doc;
-    DeserializationError error = deserializeJson(doc, bodyContent);
-    if (error){
-        request->send(400, dataType, "{ \"status\": \"Error de JSON enviado\" }");
-        return;
-    };
+//     // capturamos la data en string
+//     String bodyContent = GetBodyContent(data, len);
+//     // Validar que sea un JSON
+//     StaticJsonDocument<384> doc;
+//     DeserializationError error = deserializeJson(doc, bodyContent);
+//     if (error){
+//         request->send(400, dataType, "{ \"status\": \"Error de JSON enviado\" }");
+//         return;
+//     };
 
-    if(OnOffRelays(bodyContent)){
-        // Retornamos la respuesta
-        if(settingsSave())
-            request->send(200, dataType, "{ \"relay\": true, \"name\":  \"" + doc["output"].as<String>() + "\", \"status\": true }"); 
-    }else{
-        if(settingsSave())
-            request->send(200, dataType, "{ \"relay\": true, \"name\":  \"" + doc["output"].as<String>() + "\", \"status\": false }");
-    }
-}
+//     if(OnOffRelays(bodyContent)){
+//         // Retornamos la respuesta
+//         if(settingsSave())
+//             request->send(200, dataType, "{ \"relay\": true, \"name\":  \"" + doc["output"].as<String>() + "\", \"status\": true }"); 
+//     }else{
+//         if(settingsSave())
+//             request->send(200, dataType, "{ \"relay\": true, \"name\":  \"" + doc["output"].as<String>() + "\", \"status\": false }");
+//     }
+// }
 // -------------------------------------------------------------------
 // Manejo del dimmer
 // url: /api/device/dimmer

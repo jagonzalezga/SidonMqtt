@@ -72,19 +72,16 @@ void startClient(){
         b++;
         log("WARNING","Intentando conexión WiFi ...");
         vTaskDelay(250);
-        digitalWrite(WIFILED, HIGH);
-        vTaskDelay(250);
-        digitalWrite(WIFILED, LOW);
-        blinkSingle(100, WIFILED);        
+       
     }
     if(WiFi.status() == WL_CONNECTED){
         log("INFO","WiFi conectado (" + String(WiFi.RSSI()) + ") dBm IPv4 " + ipStr(WiFi.localIP()));
-        blinkRandomSingle(10, 100, WIFILED);
+        // blinkRandomSingle(10, 100, WIFILED);
         wifi_app = WIFI_STA;
         wifi_change = true;
     }else{
         log("ERROR","WiFi no conectado");        
-        blinkRandomSingle(10, 100, WIFILED);
+        // blinkRandomSingle(10, 100, WIFILED);
         wifi_change = true;
         startAP();
     }
@@ -123,7 +120,7 @@ void wifiLoop(){
     unsigned long currentMillis = millis();
     if(WiFi.status() != WL_CONNECTED && (currentMillis - previousMillisWIFI >= intervalWIFI)){
         w++;
-        blinkSingle(100, WIFILED);
+        // blinkSingle(100, WIFILED);
         WiFi.disconnect(true);
         WiFi.reconnect();
         previousMillisWIFI = currentMillis;
@@ -137,7 +134,7 @@ void wifiLoop(){
             log("WARNING","SSID " + String(wifi_ssid) + " desconectado ");
         }
     }else{
-       blinkSingleAsy(10, 500, WIFILED); 
+    //    blinkSingleAsy(10, 500, WIFILED); 
     }
 }
 // -------------------------------------------------------------------
@@ -145,7 +142,7 @@ void wifiLoop(){
 // -------------------------------------------------------------------
 byte a = 0;
 void wifiAPLoop(){
-    blinkSingleAsy(50, 1000, WIFILED);
+    // blinkSingleAsy(50, 1000, WIFILED);
     dnsServer.processNextRequest(); // Portal captivo DNS
     unsigned long currentMillis = millis();
     if((currentMillis - previousMillisAP >= intervalWIFI) && wifi_change){

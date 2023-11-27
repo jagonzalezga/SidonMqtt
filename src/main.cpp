@@ -71,8 +71,8 @@ void setup() {
   //inicializacion de los dispositivos de corriente
   initADS();
   // Paso estados a los pines de los Relays
-  setOnOffSingle(RELAY1, RELAY1_STATUS);
-  setOnOffSingle(RELAY2, RELAY2_STATUS);
+  // setOnOffSingle(RELAY1, RELAY1_STATUS);
+  // setOnOffSingle(RELAY2, RELAY2_STATUS);
   // Pasar el dato del dimmer
   ledcWrite(ledChannel, dim * 2.55); // dim => 0 - 100 
   // iniciar el wifi
