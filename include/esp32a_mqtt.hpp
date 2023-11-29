@@ -246,34 +246,64 @@ String Json(){
     //jsonDoc["deviceSdk"]          = String(ESP.getSdkVersion());
     jsonDoc["tiempoActivo"]   = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
     JsonArray dataObj = jsonDoc.createNestedArray("lecturas");
-    //JsonObject dataObj            = jsonDoc.createNestedObject("lecturas");
-    JsonObject device1            = dataObj.createNestedObject();
-    device1["Valor"] = temperaturesC[0];
-    device1["GPIO"]  = "IO27";
-    device1["MAC"]  = macAddresses[0];
-    JsonObject device2            = dataObj.createNestedObject();
-    device2["Valor"] = temperaturesC[1];
-    device2["GPIO"]  = "IO27";
-    device2["MAC"]  = macAddresses[1];
-    JsonObject device3            = dataObj.createNestedObject();
-    device3["Valor"] = temperaturesC[2];
-    device3["GPIO"]  = "IO27";
-    device3["MAC"]  = macAddresses[2];
-    JsonObject device4            = dataObj.createNestedObject();
-    device4["Valor"] = temperaturesC[3];
-    device4["GPIO"]  = "IO27";
-    device4["MAC"]  = macAddresses[3];
-    JsonObject device5            = dataObj.createNestedObject();
-    device5["Valor"] = temperaturesC[4];
-    device5["GPIO"]  = "IO27";
-    device5["MAC"]  = macAddresses[4];
-    JsonObject device6            = dataObj.createNestedObject();
-    device6["Valor"] = temperaturesC[5];
-    device6["GPIO"]  = "IO27";
-    device6["MAC"]  = macAddresses[5];
-    JsonObject device7            = dataObj.createNestedObject();
-    device7["Valor"] = temperaturesC[6];
-    device7["GPIO"]  = macAddresses[6];
+    // -------------------------------------------------------------------
+    //SECCION DE TEMPERATURAS
+    // -------------------------------------------------------------------
+    if(deviceCount < 1)
+    {
+        JsonObject device1            = dataObj.createNestedObject();
+        device1["Valor"] = temperaturesC[0];
+        device1["GPIO"]  = "IO27";
+        device1["MAC"]  = macAddresses[0];
+    }
+    else if(deviceCount < 2)
+    {
+        JsonObject device2            = dataObj.createNestedObject();
+        device2["Valor"] = temperaturesC[1];
+        device2["GPIO"]  = "IO27";
+        device2["MAC"]  = macAddresses[1];
+    }
+    else if(deviceCount < 3)
+    {
+        JsonObject device3            = dataObj.createNestedObject();
+        device3["Valor"] = temperaturesC[2];
+        device3["GPIO"]  = "IO27";
+        device3["MAC"]  = macAddresses[2];
+    }
+    else if(deviceCount < 4)
+    {
+        JsonObject device4            = dataObj.createNestedObject();
+        device4["Valor"] = temperaturesC[3];
+        device4["GPIO"]  = "IO27";
+        device4["MAC"]  = macAddresses[3];
+    }
+    else if(deviceCount < 5)
+    {
+        JsonObject device4            = dataObj.createNestedObject();
+        device4["Valor"] = temperaturesC[4];
+        device4["GPIO"]  = "IO27";
+        device4["MAC"]  = macAddresses[4];        
+    }
+    else if(deviceCount < 6)
+    {
+        JsonObject device6            = dataObj.createNestedObject();
+        device6["Valor"] = temperaturesC[5];
+        device6["GPIO"]  = "IO27";
+        device6["MAC"]  = macAddresses[5];        
+    }      
+    else if(deviceCount < 7)
+    {
+        JsonObject device7            = dataObj.createNestedObject();
+        device7["Valor"] = temperaturesC[6];
+        device7["GPIO"]  = "IO27";
+        device7["MAC"]   = macAddresses[6];        
+    } 
+
+
+
+    // -------------------------------------------------------------------
+    //SECCION DE CORRIENTES
+    // -------------------------------------------------------------------
     JsonObject device8            = dataObj.createNestedObject();
     device8["Valor"] = corrienteArray[0];
     device8["GPIO"]  = Ax[0];
@@ -286,7 +316,10 @@ String Json(){
     JsonObject device11            = dataObj.createNestedObject();
     device11["Valor"] = corrienteArray[3];
     device11["GPIO"]  = Ax[3];
-    currentIndex = 0;//variable que se usa en la parte de corrientes 
+    currentIndex = 0;//variable que se usa en la parte de corrientes
+    // -------------------------------------------------------------------
+    //SECCION DE ESTADOS
+    // -------------------------------------------------------------------
     JsonObject device12            = dataObj.createNestedObject();
     device12["Valor"] = valoresDigitales[0];
     device12["GPIO"]  = "SE1";
