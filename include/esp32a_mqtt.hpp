@@ -32,6 +32,7 @@ void callback(char *topic, byte *payload, unsigned int length);
 void mqtt_publish();
 String Json();
 void mqttloop();
+String JsonEST(String pin_,int currentState_);
 
 // -------------------------------------------------------------------
 // MQTT Connect
@@ -133,7 +134,7 @@ if (doc["command"] == "getStatus")
         {  //Comprueba si devices contiene el mismo DeviceID que el dispositivo o Comprueba si "devices" contiene solo un elemento con valor "*"
             if ((device.as<String>() == DeviceID()) || (devices.size() == 1 && devices[0] == "*")) {
                 // Realiza la acción que deseas cuando se encuentra una coincidencia
-                Serial.println("Se encontró una coincidencia con deviceid.");
+                Serial.println("Se encontró una coincidencia con  el deviceid.");
                 // Puedes realizar la acción deseada aquí
                 mqtt_publish();
             }
@@ -143,8 +144,33 @@ if (doc["command"] == "getStatus")
     {
         Serial.println("No se encontró la clave 'devices' en el JSON.");
     }
-} 
-else {
+}
+else if (doc["command"] == "restart")
+{
+    // Realiza la acción que deseas cuando el comando es "getStatus"
+    Serial.println("Comando restart recibido");
+    // Verifica si el JSON contiene la clave "devices"
+    if (doc.containsKey("devices")) 
+    {
+        JsonArray devices = doc["devices"].as<JsonArray>();
+        for (const JsonVariant& device : devices) 
+        {  //Comprueba si devices contiene el mismo DeviceID que el dispositivo o Comprueba si "devices" contiene solo un elemento con valor "*"
+            if ((device.as<String>() == DeviceID()) || (devices.size() == 1 && devices[0] == "*")) {
+                // Realiza la acción que deseas cuando se encuentra una coincidencia
+                Serial.println("Se encontró una coincidencia con  el deviceid.");
+                Serial.println("Reseteando sidon");
+                vTaskDelay(3000/portTICK_PERIOD_MS);
+                ESP.restart();
+            }
+        }
+    }
+    else 
+    {
+        Serial.println("No se encontró la clave 'devices' en el JSON.");
+    }
+}
+else 
+{
     Serial.println("Comando no válido.");
 }
  // Limpia el documento JSON si es necesario
@@ -185,14 +211,21 @@ else {
 
 }
 // -------------------------------------------------------------------
-// Manejo de los Mensajes Salientes
+// Manejo de los Mensajes Salientes y mensajes de sensores de estado
 // ------------------------------------------------------------------- 
 void mqtt_publish(){
-    //String topic = PathMqttTopic("device");//prototipo de fucnion inicial
-    String topic = PathMqttTopic("status");//prototipo de funcion para la conexion con carlos
+    String topic = PathMqttTopic("device");
     log("MQTT", topic);
 
     mqtt_data = Json();
+    mqttClient.publish(topic.c_str(), mqtt_data.c_str(), mqtt_retain);
+    mqtt_data = "";
+}
+void mqtt_publishEst(String pin, int currentState){
+    String topic = PathMqttTopic("EST");
+    log("MQTT", topic);
+
+    mqtt_data = JsonEST(pin,currentState);
     mqttClient.publish(topic.c_str(), mqtt_data.c_str(), mqtt_retain);
     mqtt_data = "";
 }
@@ -213,34 +246,64 @@ String Json(){
     //jsonDoc["deviceSdk"]          = String(ESP.getSdkVersion());
     jsonDoc["tiempoActivo"]   = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
     JsonArray dataObj = jsonDoc.createNestedArray("lecturas");
-    //JsonObject dataObj            = jsonDoc.createNestedObject("lecturas");
-    JsonObject device1            = dataObj.createNestedObject();
-    device1["Valor"] = temperaturesC[0];
-    device1["GPIO"]  = "IO27";
-    device1["MAC"]  = macAddresses[0];
-    JsonObject device2            = dataObj.createNestedObject();
-    device2["Valor"] = temperaturesC[1];
-    device2["GPIO"]  = "IO27";
-    device2["MAC"]  = macAddresses[1];
-    JsonObject device3            = dataObj.createNestedObject();
-    device3["Valor"] = temperaturesC[2];
-    device3["GPIO"]  = "IO27";
-    device3["MAC"]  = macAddresses[2];
-    JsonObject device4            = dataObj.createNestedObject();
-    device4["Valor"] = temperaturesC[3];
-    device4["GPIO"]  = "IO27";
-    device4["MAC"]  = macAddresses[3];
-    JsonObject device5            = dataObj.createNestedObject();
-    device5["Valor"] = temperaturesC[4];
-    device5["GPIO"]  = "IO27";
-    device5["MAC"]  = macAddresses[4];
-    JsonObject device6            = dataObj.createNestedObject();
-    device6["Valor"] = temperaturesC[5];
-    device6["GPIO"]  = "IO27";
-    device6["MAC"]  = macAddresses[5];
-    JsonObject device7            = dataObj.createNestedObject();
-    device7["Valor"] = temperaturesC[6];
-    device7["GPIO"]  = macAddresses[6];
+    // -------------------------------------------------------------------
+    //SECCION DE TEMPERATURAS
+    // -------------------------------------------------------------------
+    if(deviceCount < 1)
+    {
+        JsonObject device1            = dataObj.createNestedObject();
+        device1["Valor"] = temperaturesC[0];
+        device1["GPIO"]  = "IO27";
+        device1["MAC"]  = macAddresses[0];
+    }
+    else if(deviceCount < 2)
+    {
+        JsonObject device2            = dataObj.createNestedObject();
+        device2["Valor"] = temperaturesC[1];
+        device2["GPIO"]  = "IO27";
+        device2["MAC"]  = macAddresses[1];
+    }
+    else if(deviceCount < 3)
+    {
+        JsonObject device3            = dataObj.createNestedObject();
+        device3["Valor"] = temperaturesC[2];
+        device3["GPIO"]  = "IO27";
+        device3["MAC"]  = macAddresses[2];
+    }
+    else if(deviceCount < 4)
+    {
+        JsonObject device4            = dataObj.createNestedObject();
+        device4["Valor"] = temperaturesC[3];
+        device4["GPIO"]  = "IO27";
+        device4["MAC"]  = macAddresses[3];
+    }
+    else if(deviceCount < 5)
+    {
+        JsonObject device4            = dataObj.createNestedObject();
+        device4["Valor"] = temperaturesC[4];
+        device4["GPIO"]  = "IO27";
+        device4["MAC"]  = macAddresses[4];        
+    }
+    else if(deviceCount < 6)
+    {
+        JsonObject device6            = dataObj.createNestedObject();
+        device6["Valor"] = temperaturesC[5];
+        device6["GPIO"]  = "IO27";
+        device6["MAC"]  = macAddresses[5];        
+    }      
+    else if(deviceCount < 7)
+    {
+        JsonObject device7            = dataObj.createNestedObject();
+        device7["Valor"] = temperaturesC[6];
+        device7["GPIO"]  = "IO27";
+        device7["MAC"]   = macAddresses[6];        
+    } 
+
+
+
+    // -------------------------------------------------------------------
+    //SECCION DE CORRIENTES
+    // -------------------------------------------------------------------
     JsonObject device8            = dataObj.createNestedObject();
     device8["Valor"] = corrienteArray[0];
     device8["GPIO"]  = Ax[0];
@@ -253,7 +316,10 @@ String Json(){
     JsonObject device11            = dataObj.createNestedObject();
     device11["Valor"] = corrienteArray[3];
     device11["GPIO"]  = Ax[3];
-    currentIndex = 0;//variable que se usa en la parte de corrientes 
+    currentIndex = 0;//variable que se usa en la parte de corrientes
+    // -------------------------------------------------------------------
+    //SECCION DE ESTADOS
+    // -------------------------------------------------------------------
     JsonObject device12            = dataObj.createNestedObject();
     device12["Valor"] = valoresDigitales[0];
     device12["GPIO"]  = "SE1";
@@ -290,6 +356,25 @@ String Json(){
 	// dataObj["wifiQuality"]        = WiFi.status() == WL_CONNECTED ? getRSSIasQuality(WiFi.RSSI()) : 0;
     
     serializeJson(jsonDoc, response);
+    jsonDoc.clear();
+    return response;
+}
+// -------------------------------------------------------------------
+// Json encargado de generar el mensaje de sensores de estado
+// -------------------------------------------------------------------
+String JsonEST(String pin_,int currentState_){
+    String response;
+    DynamicJsonDocument jsonDoc(1024);
+    jsonDoc["CodigoMDC"]          = DeviceID();//numero de serie del sidon 
+    jsonDoc["VersionFw"]    = device_fw_version;//FECHA DE CREACION/MODIFICACION DEL FIRMWARE
+    jsonDoc["VersionHw"]    = String(device_hw_version);//VERSION DEL HARDWARE
+    jsonDoc["tiempoActivo"]   = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
+    JsonArray dataObj = jsonDoc.createNestedArray("lecturas");
+    JsonObject device1            = dataObj.createNestedObject();
+    device1["Valor"] = currentState_;
+    device1["GPIO"]  = pin_;
+    serializeJson(jsonDoc, response);
+    Serial.println(response);
     jsonDoc.clear();
     return response;
 }
