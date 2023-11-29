@@ -214,7 +214,7 @@ else
 // Manejo de los Mensajes Salientes y mensajes de sensores de estado
 // ------------------------------------------------------------------- 
 void mqtt_publish(){
-    String topic = PathMqttTopic("device");
+    String topic = PathMqttTopic("status");
     log("MQTT", topic);
 
     mqtt_data = Json();
@@ -235,6 +235,7 @@ void mqtt_publishEst(String pin, int currentState){
 String Json(){
     String response;
     DynamicJsonDocument jsonDoc(3000);
+    JsonObject device[deviceCount];
     GetTemperature();
     getCorrientes();
     SensorEstados();
@@ -247,59 +248,15 @@ String Json(){
     jsonDoc["tiempoActivo"]   = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
     JsonArray dataObj = jsonDoc.createNestedArray("lecturas");
     // -------------------------------------------------------------------
-    //SECCION DE TEMPERATURAS
+    //SECCION DE TEMPERATURAS 
     // -------------------------------------------------------------------
-    if(deviceCount < 1)
+    for (int i = 0; i < deviceCount; i++)
     {
-        JsonObject device1            = dataObj.createNestedObject();
-        device1["Valor"] = temperaturesC[0];
-        device1["GPIO"]  = "IO27";
-        device1["MAC"]  = macAddresses[0];
+        device[i] = dataObj.createNestedObject();
+        device[i] ["Valor"]  = temperaturesC[i];
+        device[i] ["GPIO"]   = "IO27";
+        device[i] ["MAC"]    = macAddresses[i];
     }
-    else if(deviceCount < 2)
-    {
-        JsonObject device2            = dataObj.createNestedObject();
-        device2["Valor"] = temperaturesC[1];
-        device2["GPIO"]  = "IO27";
-        device2["MAC"]  = macAddresses[1];
-    }
-    else if(deviceCount < 3)
-    {
-        JsonObject device3            = dataObj.createNestedObject();
-        device3["Valor"] = temperaturesC[2];
-        device3["GPIO"]  = "IO27";
-        device3["MAC"]  = macAddresses[2];
-    }
-    else if(deviceCount < 4)
-    {
-        JsonObject device4            = dataObj.createNestedObject();
-        device4["Valor"] = temperaturesC[3];
-        device4["GPIO"]  = "IO27";
-        device4["MAC"]  = macAddresses[3];
-    }
-    else if(deviceCount < 5)
-    {
-        JsonObject device4            = dataObj.createNestedObject();
-        device4["Valor"] = temperaturesC[4];
-        device4["GPIO"]  = "IO27";
-        device4["MAC"]  = macAddresses[4];        
-    }
-    else if(deviceCount < 6)
-    {
-        JsonObject device6            = dataObj.createNestedObject();
-        device6["Valor"] = temperaturesC[5];
-        device6["GPIO"]  = "IO27";
-        device6["MAC"]  = macAddresses[5];        
-    }      
-    else if(deviceCount < 7)
-    {
-        JsonObject device7            = dataObj.createNestedObject();
-        device7["Valor"] = temperaturesC[6];
-        device7["GPIO"]  = "IO27";
-        device7["MAC"]   = macAddresses[6];        
-    } 
-
-
 
     // -------------------------------------------------------------------
     //SECCION DE CORRIENTES
