@@ -83,9 +83,8 @@ int             mqtt_willQoS;                           // Will calidad de servi
 boolean         mqtt_willRetain;                        // Will mensaje retenido
 boolean         mqtt_time_send;                         // Habilitar en envio de datos
 int             mqtt_time_interval;                     // Tiempo de envio por MQTT en segundos
-boolean         mqtt_status_send;                       // Habilitar en envio de estados
+bool            mqtt_status_send;                       // Habilitar en envio de estados
 char            mqtt_topic[150];                         //esta linea se agrego para el topic al que se conectara al rabbit de carlos
-//String          mqtt_topic;
 // -------------------------------------------------------------------
 // Zona EEPROM para contador de reinicios
 // -------------------------------------------------------------------

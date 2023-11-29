@@ -145,13 +145,18 @@ void settingsReset(){
     strlcpy(mqtt_user, "admin", sizeof(mqtt_user));
     strlcpy(mqtt_password, "admin", sizeof(mqtt_password));
     mqtt_clean_sessions = true;
-    strlcpy(mqtt_willTopic, PathMqttTopic("error").c_str(), sizeof(mqtt_willTopic));
-    strlcpy(mqtt_willMessage, "{\"connected\": false}", sizeof(mqtt_willMessage));
+    strlcpy(mqtt_willTopic, PathMqttTopic("willmsg").c_str(), sizeof(mqtt_willTopic));
+    // Obtener el ID del dispositivo como una cadena de caracteres
+    String deviceID = DeviceID();
+    // Construir la cadena JSON utilizando std::string
+    String jsonMessage = "{\"connected\": false,\"Device\":" + deviceID + "}";
+    // Copiar la cadena resultante en mqtt_willMessage
+    strlcpy(mqtt_willMessage, jsonMessage.c_str(), sizeof(mqtt_willMessage));
     mqtt_willQoS = 0;
     mqtt_willRetain = false;
-    mqtt_time_send = true;
+    mqtt_time_send = false;
     mqtt_time_interval = 60000;//intervalo de envio de mensajes 60 segundos como ejemplo se puede modificar con la API
-    mqtt_status_send = false;//esta variable habilita o deshabilita el envio de mensaje
+    mqtt_status_send = true;//esta variable habilita o deshabilita el envio de mensaje
     // -------------------------------------------------------------------
     // Relays settings.json
     // -------------------------------------------------------------------        

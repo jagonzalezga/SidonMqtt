@@ -60,11 +60,18 @@ boolean mqtt_connect(){
         willMessage: la carga del mensaje del testamento
         cleanSession: Si cleansession se establece en true , se eliminarán todos los temas suscritos
     */
-    String topic_publish = PathMqttTopic("status");//define el path completo para la conexion emqx/ESP329B1C52100C3D/status usuario/clientid/comando y aqui se publica el json con todas las variables del estatus de lo que se monitoreara
+    String topic_publish = PathMqttTopic("willmsg");//define el path completo para la conexion emqx/ESP329B1C52100C3D/status usuario/clientid/comando y aqui se publica el json con todas las variables del estatus de lo que se monitoreara
     topic_publish.toCharArray(mqtt_willTopic, 150);//mensaje de ultima voluntad
 
     if(mqttClient.connect(mqtt_id, mqtt_user, mqtt_password, mqtt_willTopic, mqtt_willQoS, mqtt_willRetain, mqtt_willMessage, mqtt_clean_sessions)){
         log("INFO","Conectado al Broker MQTT");
+        vTaskDelay(10/portTICK_PERIOD_MS);
+        log("debug", mqtt_willTopic);
+        String deviceID = DeviceID();
+        // Construir la cadena JSON utilizando std::string
+        String jsonMessage = "{\"connected\": true,\"Device\":" + deviceID + "}";
+        mqttClient.publish(mqtt_willTopic,jsonMessage.c_str(), mqtt_retain );
+        jsonMessage = "";
 
         mqttClient.setBufferSize(1024*5);//ya que la liberia te trunca a solo 256 bytes se puede aumentar el buffer con esta funcion para que realice el envio de datos
         log("INFO", "Buffer MQTT Size: " +String(mqttClient.getBufferSize())+ " Bytes");
@@ -80,17 +87,6 @@ boolean mqtt_connect(){
             log("INFO","Suscrito al tópico: " + String(topic));
         }else{
             log("ERROR","MQTT - Falló la suscripción"); 
-        }
-
-        if(mqtt_status_send){//si esta hablitado o no podemos enviar la telemetria
-            // int publish (topic, payload)
-            //  * int publish (topic, payload, retained)
-            // int publish (topic, payload, length, retained)
-            // topic - the topic to publish to (const char[])
-            // payload - the message to publish (const char[])
-            // retained - informacion retenida (boolean)
-            // length - the length of the message (byte)
-            mqttClient.publish(mqtt_willTopic, "{\"connected\": true}", mqtt_retain );
         }
 
     }
