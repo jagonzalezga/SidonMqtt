@@ -64,6 +64,7 @@ void handleApiIndex(AsyncWebServerRequest *request){
         wifi_mode == WIFI_STA ? json += ",\"SSID_WiFi\": \"" + String(wifi_ssid) + "\"" : json += ",\"SSID_WiFi\": \"" + String(ap_ssid) + "\"";
         wifi_mode == WIFI_STA ? json += ",\"IPv4_WiFi\": \"" + ipStr(WiFi.localIP()) + "\"" : json += ",\"IPv4_WiFi\": \"" + ipStr(WiFi.softAPIP()) + "\"";
         json += ",\"MAC_WiFi\": \"" + String(WiFi.macAddress()) + "\"";
+        json += "\",\"wifiIpStatic\":" + String(wifi_ip_static ? "true" : "false") + ",";
     json += "},";
     json += "\"mqtt\":{";
         mqttClient.connected() ? json += "\"Estado_MQTT\": \"ONLINE\" " : json += "\"Estado_MQTT\": \"OFFLINE\"";
