@@ -171,6 +171,25 @@ void handleApiWifi(AsyncWebServerRequest *request){
     request->send(200, dataType, json);
 }
 // -------------------------------------------------------------------
+// Leer parámetros de configuración WiFi
+// url: /api/status/wifi
+// Método: GET
+// -------------------------------------------------------------------
+void handleApistatusWifi(AsyncWebServerRequest *request){
+        if (security){
+        if (!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    }
+
+    String json = "";
+    json = "{";
+    WiFi.status() == WL_CONNECTED ? json += "\"wifiStatus\": true" : json += "\"wifiStatus\": false";
+    json += "}";
+
+    request->addInterestingHeader("API ESP32 Server");
+    request->send(200, dataType, json);
+}
+// -------------------------------------------------------------------
 // Método POST actualizar configuraciones WiFi
 // url: /api/connection/wifi
 // Método: POST
@@ -372,6 +391,27 @@ void handleApiMQTT(AsyncWebServerRequest *request){
 
     request->addInterestingHeader("API ESP32 Server");
     request->send(200, dataType, json);
+}
+
+// -------------------------------------------------------------------
+// Parámetros de configuración MQTT
+// url: /api/status/mqtt
+// Método: GET
+// -------------------------------------------------------------------
+void handleApiStatusMQTT(AsyncWebServerRequest *request){
+    if (security){
+        if (!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    }
+
+    String json = "";
+    json = "{";
+    mqttClient.connected() ? json += "\"mqttStatus\": true" : json += "\"mqttStatus\": false";
+    json += "}";
+
+    request->addInterestingHeader("API ESP32 Server");
+    request->send(200, dataType, json);
+
 }
 // -------------------------------------------------------------------
 // Actualizar las configuraciones del MQTT Conexiones
