@@ -2,13 +2,14 @@
 DeviceAddress deviceAddress; // Esta variable almacenará la dirección MAC de cada dispositivo.
 int deviceCount = 0; // Variable para contar los dispositivos encontrados.
 int deviceNum   = 0;//variable que enumera los dispositivon en el serial
-const int maxDevices = 7; // Número máximo de dispositivos que deseas almacenar.
+const int maxDevices = 10; // Número máximo de dispositivos que deseas almacenar.
 DeviceAddress deviceAddresses[maxDevices]; // Array para almacenar las direcciones MAC.
 String macAddresses[maxDevices];  // Escanea los dispositivos y almacena sus direcciones MAC en un array de strings.
 float temperaturesC[maxDevices]; // Array para almacenar las temperaturas en grados centigrados
 float temperaturesF[maxDevices]; // Array para almacenar las temperaturas en farenheit
 
 void InitDigitalTemperature()
+
 {
   sensors.begin();
   deviceCount = sensors.getDeviceCount();//manda a llamar la funcion de la libreria dallas y retorna elnumero de dispositivos conectados al bus de datos

@@ -58,7 +58,7 @@ void startAP(){
 // -------------------------------------------------------------------
 void startClient(){
     log("INFO","Iniciando Modo Estación");
-    WiFi.mode(WIFI_STA);
+    WiFi.mode(WIFI_AP_STA);
     if(wifi_ip_static){
         if(!WiFi.config(CharToIP(wifi_ipv4), CharToIP(wifi_gateway), CharToIP(wifi_subnet), CharToIP(wifi_dns_primary), CharToIP(wifi_dns_secondary))){
             log("ERROR", "Falló la configuración en Modo Estación");
@@ -77,7 +77,7 @@ void startClient(){
     if(WiFi.status() == WL_CONNECTED){
         log("INFO","WiFi conectado (" + String(WiFi.RSSI()) + ") dBm IPv4 " + ipStr(WiFi.localIP()));
         // blinkRandomSingle(10, 100, WIFILED);
-        wifi_app = WIFI_STA;
+        wifi_app = WIFI_AP_STA;
         wifi_change = true;
     }else{
         log("ERROR","WiFi no conectado");        
@@ -103,7 +103,7 @@ void wifi_setup(){
         log("INFO","WiFi en Modo AP");
     }
     // Iniciar hostname broadcast en modo STA o AP 
-    if(wifi_app == WIFI_STA || wifi_app == WIFI_AP)
+    if(wifi_app == WIFI_STA || wifi_app == WIFI_AP || wifi_app == WIFI_AP_STA)
     {
         if(MDNS.begin(esp_hostname))
         {
