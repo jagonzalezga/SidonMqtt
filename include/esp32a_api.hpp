@@ -312,7 +312,8 @@ void handleApiWifiScan(AsyncWebServerRequest *request){
     if (security){
         if (!request->authenticate(device_user, device_password))
             return request->requestAuthentication();
-    }    
+    }  
+
     String json = "";
     int n = WiFi.scanComplete();
     if (n == -2){
@@ -322,7 +323,9 @@ void handleApiWifiScan(AsyncWebServerRequest *request){
         json += "],";
         json += "\"code\": 0 ";
         json += "}";
-        WiFi.scanNetworks(true, true);
+        
+        
+        
     } else if (n){
         json = "{";
         json += "\"meta\": { \"serial\": \"" + DeviceID() + "\", \"count\":" + String(n) + "},";
@@ -350,6 +353,7 @@ void handleApiWifiScan(AsyncWebServerRequest *request){
             WiFi.scanNetworks(true, true);
         }
     }
+
     request->addInterestingHeader("API ESP32 Server");
     request->send(200, dataType, json);
 }
