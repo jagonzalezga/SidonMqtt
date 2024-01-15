@@ -239,65 +239,24 @@ String Json(){
     getCorrientes();
     SensorEstados();
     // Crear JSON
-    jsonDoc["CodigoMDC"]          = DeviceID();//numero de serie del sidon 
+    jsonDoc["CodigoMDC"]            = DeviceID();//numero de serie del sidon 
     //jsonDoc["deviceManufacturer"] = String(device_manufacturer);//FABRICANTE
-    jsonDoc["VersionFw"]    = device_fw_version;//FECHA DE CREACION/MODIFICACION DEL FIRMWARE
-    jsonDoc["VersionHw"]    = String(device_hw_version);//VERSION DEL HARDWARE
+    jsonDoc["VersionFw"]            = device_fw_version;//FECHA DE CREACION/MODIFICACION DEL FIRMWARE
+    jsonDoc["VersionHw"]            = String(device_hw_version);//VERSION DEL HARDWARE
     //jsonDoc["deviceSdk"]          = String(ESP.getSdkVersion());
-    jsonDoc["tiempoActivo"]   = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
-    JsonArray dataObj = jsonDoc.createNestedArray("lecturas");
+    jsonDoc["tiempoActivo"]         = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
+    JsonArray dataObj               = jsonDoc.createNestedArray("lecturas");
     // -------------------------------------------------------------------
     //SECCION DE TEMPERATURAS
     // -------------------------------------------------------------------
-    if(deviceCount < 1)
-    {
-        JsonObject device1            = dataObj.createNestedObject();
-        device1["Valor"] = temperaturesC[0];
-        device1["GPIO"]  = "IO27";
-        device1["MAC"]  = macAddresses[0];
-    }
-    else if(deviceCount < 2)
-    {
-        JsonObject device2            = dataObj.createNestedObject();
-        device2["Valor"] = temperaturesC[1];
-        device2["GPIO"]  = "IO27";
-        device2["MAC"]  = macAddresses[1];
-    }
-    else if(deviceCount < 3)
-    {
-        JsonObject device3            = dataObj.createNestedObject();
-        device3["Valor"] = temperaturesC[2];
-        device3["GPIO"]  = "IO27";
-        device3["MAC"]  = macAddresses[2];
-    }
-    else if(deviceCount < 4)
-    {
-        JsonObject device4            = dataObj.createNestedObject();
-        device4["Valor"] = temperaturesC[3];
-        device4["GPIO"]  = "IO27";
-        device4["MAC"]  = macAddresses[3];
-    }
-    else if(deviceCount < 5)
-    {
-        JsonObject device4            = dataObj.createNestedObject();
-        device4["Valor"] = temperaturesC[4];
-        device4["GPIO"]  = "IO27";
-        device4["MAC"]  = macAddresses[4];        
-    }
-    else if(deviceCount < 6)
-    {
-        JsonObject device6            = dataObj.createNestedObject();
-        device6["Valor"] = temperaturesC[5];
-        device6["GPIO"]  = "IO27";
-        device6["MAC"]  = macAddresses[5];        
-    }      
-    else if(deviceCount < 7)
-    {
-        JsonObject device7            = dataObj.createNestedObject();
-        device7["Valor"] = temperaturesC[6];
-        device7["GPIO"]  = "IO27";
-        device7["MAC"]   = macAddresses[6];        
-    } 
+    for (int i = 0; i < deviceCount && i < maxDevices; i++)
+{
+    JsonObject device = dataObj.createNestedObject();
+    device["Valor"] = temperaturesC[i];
+    device["GPIO"] = "IO27";
+    device["MAC"] = macAddresses[i];
+}
+
 
 
 

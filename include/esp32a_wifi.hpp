@@ -23,7 +23,7 @@ bool wifi_change = false;//detectar cambios en la conexion
 
 unsigned long previousMillisWIFI = 0;//temporizacion modo wifi
 unsigned long previousMillisAP = 0;//temporizacion modo AP
-unsigned long intervalWIFI = 30000; // 30 Segundos
+unsigned long intervalWIFI = 120000; // 2 minutos
 
 // e.j http://adminesp32.local
 const char *esp_hostname = device_name;

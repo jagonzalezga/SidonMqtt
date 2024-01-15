@@ -33,7 +33,7 @@
 
 // API v1 json desde String
 
-bool security = false;
+bool security = true;
 const char *dataType = "application/json";
 
 // -------------------------------------------------------------------
@@ -210,6 +210,7 @@ void handleApiPostWiFi(AsyncWebServerRequest *request, uint8_t *data, size_t len
     // -------------------------------------------------------------------
     // WIFI Cliente settings.json
     // -------------------------------------------------------------------
+    
     String s = "";
     // APP Mode
     wifi_mode = doc["wifi_mode"].as<bool>();
@@ -313,7 +314,7 @@ void handleApiWifiScan(AsyncWebServerRequest *request){
         if (!request->authenticate(device_user, device_password))
             return request->requestAuthentication();
     }  
-
+log("INFO", "escanenado redes");
     String json = "";
     int n = WiFi.scanComplete();
     if (n == -2){
@@ -322,11 +323,11 @@ void handleApiWifiScan(AsyncWebServerRequest *request){
         json += "\"data\": [";
         json += "],";
         json += "\"code\": 0 ";
-        json += "}";
-        
-        
-        
-    } else if (n){
+        json += "}";   
+        WiFi.scanNetworks(true, true);
+        log("INFO", "escanenado redes 1");
+    } 
+    else if (n){
         json = "{";
         json += "\"meta\": { \"serial\": \"" + DeviceID() + "\", \"count\":" + String(n) + "},";
         json += "\"data\": [";
@@ -352,10 +353,12 @@ void handleApiWifiScan(AsyncWebServerRequest *request){
         if (WiFi.scanComplete() == -2){
             WiFi.scanNetworks(true, true);
         }
+        log("INFO", "escanenado redes 2");
     }
 
     request->addInterestingHeader("API ESP32 Server");
     request->send(200, dataType, json);
+    log("INFO", "escanenado redes 3");
 }
 // -------------------------------------------------------------------
 // Parámetros de configuración MQTT
@@ -805,4 +808,39 @@ void handleApiPostconstantecorriente(AsyncWebServerRequest *request, uint8_t *da
 
     constanteCorriente = doc["constantecorriente"];
     request->send(200, dataType, "{ \"Save\": true, \"value\": \"" + String(constanteCorriente) + "\" }");
+}
+// -------------------------------------------------------------------
+// Manejo de request sensores de temperatura
+// url: /api/connection/temp
+// Método: POST
+// -------------------------------------------------------------------
+void handleApiTemp(AsyncWebServerRequest *request) {
+    if (security) {
+        if (!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    } 
+
+    InitDigitalTemperature();
+    
+    // Imprimir el valor de deviceCount para verificar si se detectan los sensores correctamente
+    Serial.print("Número de sensores detectados: ");
+    Serial.println(deviceCount);
+
+    DynamicJsonDocument jsonDoc(1024);
+    // Crear un array JSON para almacenar las direcciones de los sensores
+    JsonArray sensorArray = jsonDoc.to<JsonArray>();
+
+    // Agregar las direcciones de los sensores al array JSON
+    for (int i = 0; i < deviceCount; i++) {
+        JsonObject sensor = sensorArray.createNestedObject();
+        sensor["GPIO"] = "IO27";
+        sensor["MAC"] = macAddresses[i];
+    }
+
+    // Enviar la respuesta JSON con las direcciones de los sensores
+    String jsonString;
+    serializeJson(sensorArray, jsonString);
+    request->addInterestingHeader("API ESP32 Server");
+    request->send(200, dataType, (deviceCount != 0 ? jsonString : "No se detectan sensores"));
+
 }

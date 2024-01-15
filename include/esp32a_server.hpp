@@ -172,7 +172,12 @@ void initServer(){
     // Método: POST
     // -------------------------------------------------------------------
     server.on("/api/device/constantecorriente", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPostconstantecorriente);
-
+    // -------------------------------------------------------------------
+    // request de Sensores de temperatura
+    // url: /api/connection/temp
+    // Método: GET
+    // -------------------------------------------------------------------
+    server.on("/api/connection/temp", HTTP_GET, handleApiTemp);
     // manejador de error 404
     server.onNotFound([](AsyncWebServerRequest *request) {
         if (request->method() == HTTP_OPTIONS) {

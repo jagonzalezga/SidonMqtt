@@ -113,12 +113,12 @@ void settingsReset(){
     // -------------------------------------------------------------------
     strlcpy(device_id, DeviceID().c_str(), sizeof(device_id));   // ESP32DC15B80C703E
     strlcpy(device_name, extractNumbers(DeviceID()).c_str(), sizeof(device_name));
-    strlcpy(device_user, "admin", sizeof(device_user)); 
-    strlcpy(device_password, "admin", sizeof(device_password)); 
+    strlcpy(device_user, "admin", sizeof(device_user)); //********
+    strlcpy(device_password, "98374252", sizeof(device_password)); //********
     // -------------------------------------------------------------------
     // WIFI Cliente settings.json
     // -------------------------------------------------------------------
-    wifi_mode = true; // false = AP true = cliente
+    wifi_mode = false; // false = AP true = cliente//********
     strlcpy(wifi_ssid, "", sizeof(wifi_ssid));
     strlcpy(wifi_password, "", sizeof(wifi_password));
     wifi_ip_static = false; // false dhcp true fijo
@@ -138,8 +138,8 @@ void settingsReset(){
     // -------------------------------------------------------------------
     // MQTT settings.json
     // -------------------------------------------------------------------
-    mqtt_enable = false;
-    strlcpy(mqtt_server, "192.168.200.5", sizeof(mqtt_server));
+    mqtt_enable = false;//********
+    strlcpy(mqtt_server, "192.168.200.154", sizeof(mqtt_server));
     mqtt_port = 1883;//puerto del broker mqtt
     mqtt_retain = false;
     mqtt_qos = 1;//quiality of service
