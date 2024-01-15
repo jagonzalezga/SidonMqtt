@@ -26,27 +26,22 @@ void textDraw()
     display.setTextColor(WHITE);
     display.setCursor(0, 0);
     display.println(DeviceID().c_str());
-    
-    // display.setTextSize(0.3);
-    // display.setTextColor(WHITE);
-    // display.setCursor(0, 12);
-    // display.println("RSSI " + WiFi.RSSI());
+
+    display.setTextSize(0.3);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 12);
+    display.println(ipStr(WiFi.localIP()));
+
 
     display.setTextSize(0.3);
     display.setTextColor(WHITE);
     display.setCursor(0, 24);
-    display.println(ipStr(WiFi.localIP()));
-
-
-    // display.setTextSize(0.3);
-    // display.setTextColor(WHITE);
-    // display.setCursor(0, 24);
-    // display.println(rtc4.getTime("%Y/%d/%m  %H:%M:%S"));
+    display.println("Modo cliente");
     
     display.display();
 }
 
-void textDrawGeneric(char* top_,char* middle_,char* botton_)
+void textDrawGeneric()
 {
 
     display.clearDisplay();
@@ -54,18 +49,12 @@ void textDrawGeneric(char* top_,char* middle_,char* botton_)
     display.setTextSize(0.3);
     display.setTextColor(WHITE);
     display.setCursor(0, 0);
-    display.println(top_);
+    display.println("Modo AP");
 
     display.setTextSize(0.3);
     display.setTextColor(WHITE);
     display.setCursor(0, 12);
-    display.println(middle_);
-
-
-    display.setTextSize(0.3);
-    display.setTextColor(WHITE);
-    display.setCursor(0, 24);
-    display.println(botton_);
+    display.println(ipStr(WiFi.softAPIP()));
     
     display.display();
 

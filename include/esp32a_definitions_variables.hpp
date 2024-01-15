@@ -64,6 +64,7 @@ char            ap_password[63];                        // Contraseña del modo 
 int             ap_chanel;                              // Canal AP 1-13      
 int             ap_visibility;                          // Es visible o no el AP  (0 - Visible  1 - Oculto)  
 int             ap_connect;                             // Número de conexiones en el AP máx 8 conexiones ESP32
+bool            statusAP;
 // -------------------------------------------------------------------
 // Zona configuración MQTT 
 // ------------------------------------------------------------------- 

@@ -35,7 +35,7 @@ void TaskWifiReconnect(void *pvParamenters){
 void TaskMqttReconnect(void *pvParamenters){
   (void) pvParamenters;
   while(1){
-    if ((WiFi.status() == WL_CONNECTED) && (wifi_app == WIFI_STA))
+    if ((WiFi.status() == WL_CONNECTED) && (wifi_app == WIFI_AP_STA))
     {
       if(mqtt_server != 0)
       {

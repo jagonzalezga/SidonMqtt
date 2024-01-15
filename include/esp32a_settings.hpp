@@ -119,8 +119,8 @@ void settingsReset(){
     // WIFI Cliente settings.json
     // -------------------------------------------------------------------
     wifi_mode = false; // false = AP true = cliente//********
-    strlcpy(wifi_ssid, "", sizeof(wifi_ssid));
-    strlcpy(wifi_password, "", sizeof(wifi_password));
+    strlcpy(wifi_ssid, "Sidon", sizeof(wifi_ssid));
+    strlcpy(wifi_password, "3c0s4t201*", sizeof(wifi_password));
     wifi_ip_static = false; // false dhcp true fijo
     strlcpy(wifi_ipv4, "192.168.30.150", sizeof(wifi_ipv4));
     strlcpy(wifi_subnet, "255.255.255.0", sizeof(wifi_subnet));
@@ -144,8 +144,8 @@ void settingsReset(){
     mqtt_retain = false;
     mqtt_qos = 1;//quiality of service
     strlcpy(mqtt_id, DeviceID().c_str(), sizeof(mqtt_id));
-    strlcpy(mqtt_user, "admin", sizeof(mqtt_user));
-    strlcpy(mqtt_password, "98374252", sizeof(mqtt_password));
+    strlcpy(mqtt_user, "Sidon", sizeof(mqtt_user));
+    strlcpy(mqtt_password, "3c0s4t201*", sizeof(mqtt_password));
     mqtt_clean_sessions = true;
     strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
     strlcpy(mqtt_willMessage, "{\"connected\": false}", sizeof(mqtt_willMessage));

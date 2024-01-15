@@ -44,6 +44,7 @@ void startAP(){
     log("INFO","Iniciando Modo AP ...");
     WiFi.mode(WIFI_STA);
     WiFi.disconnect(true, true);
+    statusAP = true;
     vTaskDelay(20); 
     WiFi.softAPConfig(ap_IPv4, ap_IPv4, ap_subnet);
     WiFi.hostname(esp_hostname);

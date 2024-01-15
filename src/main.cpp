@@ -12,7 +12,7 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <SPIFFS.h>
-#include <WIFI.h>
+#include <WiFi.h>
 #include <DNSServer.h>
 #include <ESPmDNS.h> 
 #include <ArduinoJson.h>
@@ -77,10 +77,8 @@ void setup() {
   ledcWrite(ledChannel, dim * 2.55); // dim => 0 - 100 
   // iniciar el wifi
   wifi_setup();
-
   // inicializar el servidor
   initServer();
-
   // Crear Tarea Reconexión WIFI
   xTaskCreate(TaskWifiReconnect, "TaskWifiReconnect", 1024*6, NULL, 2, NULL);
   // Crear Tarea Reconexión MQTT
@@ -96,10 +94,13 @@ void setup() {
 
 unsigned long mtime = 0;
 void loop() {
-  // every 10 seconds
-  if(millis()-mtime > 10000 )
+
+  if (WiFi.status() == WL_CONNECTED)
   {
-    mtime = millis();
     textDraw();
+  }
+  else 
+  {
+    textDrawError();
   }
 }
