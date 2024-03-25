@@ -308,3 +308,7 @@ void dimmer(String dimmer){
         ledcWrite(ledChannel, dim * 2.55); 
         // multiplicamos por 2.55*100 para llegar a 255 que seria el maximo a 8bit = 3.3V
 }
+
+void localIP(){
+    Serial.println(WiFi.localIP());
+}

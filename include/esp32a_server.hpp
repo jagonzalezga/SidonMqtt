@@ -196,4 +196,18 @@ void initServer(){
 
     server.begin();
     log("INFO", "Servidor Asincrono HTTP iniciado");
+
+    // -------------------------------------------------------------------
+    // Manejo de parámetros de corriente
+    // url: "/api/device/constantecorriente"
+    // Método: GET
+    // -------------------------------------------------------------------
+    server.on("/api/device/tiposidon", HTTP_GET, handleApiGettiposidon);
+
+    // -------------------------------------------------------------------
+    // tipo de Sidon
+    // url: /api/tiposidon
+    // Método: POST
+    // -------------------------------------------------------------------
+    server.on("/api/device/tiposidon", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPosttiposidon);
 }

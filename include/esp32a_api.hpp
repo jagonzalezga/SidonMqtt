@@ -66,6 +66,8 @@ void handleApiIndex(AsyncWebServerRequest *request){
         json += ",\"MAC_WiFi\": \"" + String(WiFi.macAddress()) + "\",";
         json += "\"wifiIpStatic\":" + String(wifi_ip_static ? "true" : "false");
     json += "},";
+    // Agregar 'tipoSidon' y su valor actual al JSON
+    json += ",\"tipoSidon\": " + String(tipoSidon); // Asumiendo que 'tipoSidon' es un entero
     json += "\"mqtt\":{";
         mqttClient.connected() ? json += "\"Estado_MQTT\": \"ONLINE\" " : json += "\"Estado_MQTT\": \"OFFLINE\"";
         mqttClient.connected() ? json += ",\"Servidor_MQTT\": \"" + String(mqtt_server) + "\"" : json += ",\"Servidor_MQTT\": \"server not connected\"";
@@ -108,6 +110,7 @@ void handleApiIndex(AsyncWebServerRequest *request){
     request->send(200, dataType, json);
 
 }
+
 // -------------------------------------------------------------------
 // Parametros de configuración de constante de corriente
 // url: /api/constantecorriente
@@ -843,4 +846,51 @@ void handleApiTemp(AsyncWebServerRequest *request) {
     request->addInterestingHeader("API ESP32 Server");
     request->send(200, dataType, (deviceCount != 0 ? jsonString : "No se detectan sensores"));
 
+}
+
+// -------------------------------------------------------------------
+// Parametros de configuración de tipo de sidon
+// url: /api/tiposidon
+// Método: GET
+// -------------------------------------------------------------------
+void handleApiGettiposidon(AsyncWebServerRequest *request){
+    // agregar el usuario y contraseña
+    if(security){
+        if(!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    }
+
+    String json = "";
+    json = "{";
+    json += "\"tiposidon\": \"" + String(tipoSidon) + "\"";
+    // Agregar el instructivo o documentación
+    json += "\"instructivo\": \"Los valores posibles para 'tiposidon' son: VITRINA_CONG = 0,  VITRINA_CONS = 1, CUARTO_CONG = 2, CUARTO_CONS = 3, TIENDA = 4.\"";
+    json += "}";
+
+    request->addInterestingHeader("API SIDON Server");
+    request->send(200, dataType, json);
+}
+
+// -------------------------------------------------------------------
+// Manejo del tipo de sidon
+// url: /api/device/tiposidon
+// Método: POST
+// -------------------------------------------------------------------
+void handleApiPosttiposidon(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+    if (security){
+        if (!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    } 
+    // capturamos la data en string
+    String bodyContent = GetBodyContent(data, len);
+    // Validar que sea un JSON
+    StaticJsonDocument<384> doc;
+    DeserializationError error = deserializeJson(doc, bodyContent);
+    if (error){
+        request->send(400, dataType, "{ \"status\": \"Error de JSON enviado\" }");
+        return;
+    };
+
+    tipoSidon = doc["tipoSidon"];
+    request->send(200, dataType, "{ \"Save\": true, \"value\": \"" + String(tipoSidon) + "\" }");
 }

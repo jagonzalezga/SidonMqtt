@@ -80,7 +80,8 @@ void startClient(){
         // blinkRandomSingle(10, 100, WIFILED);
         wifi_app = WIFI_AP_STA;
         wifi_change = true;
-    }else{
+        localIP();
+    } else {
         log("ERROR","WiFi no conectado");        
         // blinkRandomSingle(10, 100, WIFILED);
         wifi_change = true;

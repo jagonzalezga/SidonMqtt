@@ -93,7 +93,11 @@ boolean settingsRead(){
         // -------------------------------------------------------------------
         // constante corriente settings.json
         // -------------------------------------------------------------------
-        constanteCorriente = jsonSettings["constantecorriente"]["constante"];    
+        constanteCorriente = jsonSettings["constantecorriente"]["constante"];
+        // -------------------------------------------------------------------
+        // sidon tipo settings.json
+        // -------------------------------------------------------------------
+        tipoSidon = jsonSettings["tipoSidon"]["tipo"];     
         // cerrar el archivo
         file.close();
         log("INFO", "Lectura de las configuraciones correctamente");
@@ -118,7 +122,7 @@ void settingsReset(){
     // -------------------------------------------------------------------
     // WIFI Cliente settings.json
     // -------------------------------------------------------------------
-    wifi_mode = false; // false = AP true = cliente//********
+    wifi_mode = true; // false = AP true = cliente//********
     strlcpy(wifi_ssid, "Sidon", sizeof(wifi_ssid));
     strlcpy(wifi_password, "3c0s4t201*", sizeof(wifi_password));
     wifi_ip_static = false; // false dhcp true fijo
@@ -164,7 +168,10 @@ void settingsReset(){
     // -------------------------------------------------------------------
     dim = 0;
     constanteCorriente  = 50;//constante para calculo de corriente esto lo define el sensor en este caso se debe de instalar un sensor de 50 amperes
-
+    // -------------------------------------------------------------------
+    // tipo settings.json
+    // -------------------------------------------------------------------
+    tipoSidon = 0;
 
     log("INFO","Se reiniciaron todos los valores por defecto");  
 }
@@ -245,6 +252,11 @@ boolean settingsSave(){
         // -------------------------------------------------------------------
         JsonObject currentObj = jsonSettings.createNestedObject("constantecorriente");
         currentObj["constante"] =  constanteCorriente;
+        // -------------------------------------------------------------------
+        // tipoSidon settings.json
+        // -------------------------------------------------------------------
+        JsonObject tipoObj = jsonSettings.createNestedObject("tipoSidon");
+        currentObj["tipo"] =  tipoSidon;
        
         
         jsonSettings["file_version"] = "3.0.0";

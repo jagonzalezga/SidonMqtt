@@ -35,6 +35,19 @@ String device_fw_version = ESCAPEQUOTE(BUILD_TAG);
 // -------------------------------------------------------------------
 #define device_hw_version   "2.7"    // Versión del hardware
 #define device_manufacturer "ADM"        // Fabricante
+
+// -------------------------------------------------------------------
+//Definicion de tipo de Sidon
+// -------------------------------------------------------------------
+
+typedef enum {
+    VITRINA_CONG = 0,
+    VITRINA_CONS = 1,
+    CUARTO_CONG = 2,
+    CUARTO_CONS = 3,
+    TIENDA = 4
+} sidon_mode;
+
 // -------------------------------------------------------------------
 // Zona configuración Dispositivo
 // ------------------------------------------------------------------- 
@@ -55,7 +68,7 @@ char            wifi_ipv4[16];                          // Dir IPv4 Estático
 char            wifi_gateway[16];                       // Dir IPv4 Gateway     
 char            wifi_subnet[16];                        // Dir IPv4 Subred    
 char            wifi_dns_primary[16];                   // Dir IPv4 DNS primario  
-char            wifi_dns_secondary[16];                 // Dir IPv4 DNS secundario 
+char            wifi_dns_secondary[16];                 // Dir IPv4 DNS secundario
 // -------------------------------------------------------------------
 // Zona configuración WIFI modo AP
 // -------------------------------------------------------------------
@@ -65,6 +78,10 @@ int             ap_chanel;                              // Canal AP 1-13
 int             ap_visibility;                          // Es visible o no el AP  (0 - Visible  1 - Oculto)  
 int             ap_connect;                             // Número de conexiones en el AP máx 8 conexiones ESP32
 bool            statusAP;
+// -------------------------------------------------------------------
+// Zona configuración tipo Sidon
+// ------------------------------------------------------------------- 
+int             tipoSidon = VITRINA_CONG;
 // -------------------------------------------------------------------
 // Zona configuración MQTT 
 // ------------------------------------------------------------------- 
