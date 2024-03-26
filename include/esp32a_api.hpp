@@ -65,6 +65,20 @@ void handleApiIndex(AsyncWebServerRequest *request){
         wifi_mode == WIFI_STA ? json += ",\"IPv4_WiFi\": \"" + ipStr(WiFi.localIP()) + "\"" : json += ",\"IPv4_WiFi\": \"" + ipStr(WiFi.softAPIP()) + "\"";
         json += ",\"MAC_WiFi\": \"" + String(WiFi.macAddress()) + "\",";
         json += "\"wifiIpStatic\":" + String(wifi_ip_static ? "true" : "false");
+        wifi_mode ? json += "\"wifi_mode\": true" : json += "\"wifi_mode\": false";
+        json += ",\"wifi_ssid\": \"" + String(wifi_ssid) + "\"";
+        json += ",\"wifi_password\": \"""\"";
+        wifi_ip_static ? json += ",\"wifi_ip_static\": true" : json += ",\"wifi_ip_static\": false";
+        json += ",\"wifi_ipv4\": \"" + String(wifi_ipv4) + "\"";
+        json += ",\"wifi_gateway\": \"" + String(wifi_gateway) + "\"";
+        json += ",\"wifi_subnet\": \"" + String(wifi_subnet) + "\"";
+        json += ",\"wifi_dns_primary\": \"" + String(wifi_dns_primary) + "\"";
+        json += ",\"wifi_dns_secondary\": \"" + String(wifi_dns_secondary) + "\"";
+        json += ",\"ap_ssid\": \"" + String(ap_ssid) + "\"";
+        json += ",\"ap_password\": \"""\"";
+        json += ",\"ap_chanel\":" + String(ap_chanel);
+        ap_visibility ? json += ",\"ap_visibility\": false" : json += ",\"ap_visibility\": true";
+        json += ",\"ap_connect\":" + String(ap_connect);
     json += "},";
     // Agregar 'tipoSidon' y su valor actual al JSON
     json += ",\"tipoSidon\": " + String(tipoSidon); // Asumiendo que 'tipoSidon' es un entero
@@ -73,6 +87,18 @@ void handleApiIndex(AsyncWebServerRequest *request){
         mqttClient.connected() ? json += ",\"Servidor_MQTT\": \"" + String(mqtt_server) + "\"" : json += ",\"Servidor_MQTT\": \"server not connected\"";
         json += ",\"Usuario_MQTT\": \"" + String(mqtt_user) + "\"";
         json += ",\"Cliente_ID_MQTT\": \"" + String(mqtt_id) + "\"";
+        mqtt_enable ? json += "\"mqtt_enable\": true" : json += "\"mqtt_enable\": false";
+        json += ",\"mqtt_server\": \"" + String(mqtt_server) + "\"";
+        json += ",\"mqtt_port\":" + String(mqtt_port);
+        mqtt_retain ? json += ",\"mqtt_retain\": true" : json += ",\"mqtt_retain\": false";
+        json += ",\"mqtt_qos\":" + String(mqtt_qos);
+        json += ",\"mqtt_id\": \"" + String(mqtt_id) + "\"";
+        json += ",\"mqtt_user\": \"" + String(mqtt_user) + "\"";
+        json += ",\"mqtt_password\": \"""\"";
+        mqtt_clean_sessions ? json += ",\"mqtt_clean_sessions\": true" : json += ",\"mqtt_clean_sessions\": false";
+        mqtt_time_send ? json += ",\"mqtt_time_send\": true" : json += "\"mqtt_time_send\": false";
+        json += ",\"mqtt_time_interval\":" + String(mqtt_time_interval / 1000); // 60000 / 1000 = 30s
+        mqtt_status_send ? json += ",\"mqtt_status_send\": true" : json += ",\"mqtt_status_send\": false";
     json += "},";
     json += "\"info\":{";
         json += "\"Identificacion\": \"" + String(device_name) + "\"";
@@ -93,17 +119,6 @@ void handleApiIndex(AsyncWebServerRequest *request){
     json += ",\"spiffsUsed\":" + String(SPIFFS.usedBytes() / 1024);
     json += ",\"ramAvailable\":" + String(ESP.getFreeHeap() / 1024);
     json += ",\"cpuTemp\":" + String(TempCPUValue());
-    json += ",\"relays\":[";
-        json += "{";
-            json += "\"name\": \"" + String("RELAY1") + "\"";
-            RELAY1_STATUS ? json += ",\"status\": true" : json += ",\"status\": false"; 
-        json += "},";
-        json += "{";
-            json += "\"name\": \"" + String("RELAY2") + "\"";
-            RELAY2_STATUS ? json += ",\"status\": true" : json += ",\"status\": false"; 
-        json += "}";
-    json += "]"; 
-    json += ",\"dimmer\":" + String(dim);   
     json += "}";
 
     request->addInterestingHeader("API ESP32 Server");
@@ -131,67 +146,7 @@ void handleApiGetconstantecorriente(AsyncWebServerRequest *request){
     request->addInterestingHeader("API SIDON Server");
     request->send(200, dataType, json);
 }
-// -------------------------------------------------------------------
-// Leer parámetros de configuración WiFi
-// url: /api/connection/wifi
-// Método: GET
-// -------------------------------------------------------------------
-void handleApiWifi(AsyncWebServerRequest *request){
-    if (security){
-        if (!request->authenticate(device_user, device_password))
-            return request->requestAuthentication();
-    }
 
-    String json = "";
-    json = "{";
-    json += "\"serial\": \"" + DeviceID() + "\"";
-    json += ",\"device\": \"" + platform() + "\"";
-    WiFi.status() == WL_CONNECTED ? json += ",\"wifiQuality\":" + String(getRSSIasQuality(WiFi.RSSI())) : json += ",\"wifiQuality\": 0";
-    WiFi.status() == WL_CONNECTED ? json += ",\"wifiStatus\": true" : json += ",\"wifiStatus\": false";
-    WiFi.status() == WL_CONNECTED ? json += ",\"rssiStatus\":" + String(WiFi.RSSI()) : json += ",\"rssiStatus\": 0";
-    mqttClient.connected() ? json += ",\"mqttStatus\": true" : json += ",\"mqttStatus\": false";
-    json += ",\"wifi\":";
-        json += "{";
-        wifi_mode ? json += "\"wifi_mode\": true" : json += "\"wifi_mode\": false";
-        json += ",\"wifi_ssid\": \"" + String(wifi_ssid) + "\"";
-        json += ",\"wifi_password\": \"""\"";
-        wifi_ip_static ? json += ",\"wifi_ip_static\": true" : json += ",\"wifi_ip_static\": false";
-        json += ",\"wifi_ipv4\": \"" + String(wifi_ipv4) + "\"";
-        json += ",\"wifi_gateway\": \"" + String(wifi_gateway) + "\"";
-        json += ",\"wifi_subnet\": \"" + String(wifi_subnet) + "\"";
-        json += ",\"wifi_dns_primary\": \"" + String(wifi_dns_primary) + "\"";
-        json += ",\"wifi_dns_secondary\": \"" + String(wifi_dns_secondary) + "\"";
-        json += ",\"ap_ssid\": \"" + String(ap_ssid) + "\"";
-        json += ",\"ap_password\": \"""\"";
-        json += ",\"ap_chanel\":" + String(ap_chanel);
-        ap_visibility ? json += ",\"ap_visibility\": false" : json += ",\"ap_visibility\": true";
-        json += ",\"ap_connect\":" + String(ap_connect);
-        json += "},";
-    json += "\"code\": 1 ";
-    json += "}";
-
-    request->addInterestingHeader("API ESP32 Server");
-    request->send(200, dataType, json);
-}
-// -------------------------------------------------------------------
-// Leer parámetros de configuración WiFi
-// url: /api/status/wifi
-// Método: GET
-// -------------------------------------------------------------------
-void handleApistatusWifi(AsyncWebServerRequest *request){
-        if (security){
-        if (!request->authenticate(device_user, device_password))
-            return request->requestAuthentication();
-    }
-
-    String json = "";
-    json = "{";
-    WiFi.status() == WL_CONNECTED ? json += "\"wifiStatus\": true" : json += "\"wifiStatus\": false";
-    json += "}";
-
-    request->addInterestingHeader("API ESP32 Server");
-    request->send(200, dataType, json);
-}
 // -------------------------------------------------------------------
 // Método POST actualizar configuraciones WiFi
 // url: /api/connection/wifi
@@ -363,66 +318,7 @@ log("INFO", "escanenado redes");
     request->send(200, dataType, json);
     log("INFO", "escanenado redes 3");
 }
-// -------------------------------------------------------------------
-// Parámetros de configuración MQTT
-// url: /api/connection/mqtt
-// Método: GET
-// -------------------------------------------------------------------
-void handleApiMQTT(AsyncWebServerRequest *request){    
-    if (security){
-        if (!request->authenticate(device_user, device_password))
-            return request->requestAuthentication();
-    }
-    
-    String json = "";
-    json = "{";
-    json += "\"serial\": \"" + DeviceID() + "\"";
-    json += ",\"device\": \"" + platform() + "\"";
-    WiFi.status() == WL_CONNECTED ? json += ",\"wifiQuality\":" + String(getRSSIasQuality(WiFi.RSSI())) : json += ",\"wifiQuality\": 0";
-    WiFi.status() == WL_CONNECTED ? json += ",\"wifiStatus\": true" : json += ",\"wifiStatus\": false";
-    WiFi.status() == WL_CONNECTED ? json += ",\"rssiStatus\":" + String(WiFi.RSSI()) : json += ",\"rssiStatus\": 0";
-    mqttClient.connected() ? json += ",\"mqttStatus\": true" : json += ",\"mqttStatus\": false";
-    json += ",\"mqtt\":{";
-        mqtt_enable ? json += "\"mqtt_enable\": true" : json += "\"mqtt_enable\": false";
-        json += ",\"mqtt_server\": \"" + String(mqtt_server) + "\"";
-        json += ",\"mqtt_port\":" + String(mqtt_port);
-        mqtt_retain ? json += ",\"mqtt_retain\": true" : json += ",\"mqtt_retain\": false";
-        json += ",\"mqtt_qos\":" + String(mqtt_qos);
-        json += ",\"mqtt_id\": \"" + String(mqtt_id) + "\"";
-        json += ",\"mqtt_user\": \"" + String(mqtt_user) + "\"";
-        json += ",\"mqtt_password\": \"""\"";
-        mqtt_clean_sessions ? json += ",\"mqtt_clean_sessions\": true" : json += ",\"mqtt_clean_sessions\": false";
-        mqtt_time_send ? json += ",\"mqtt_time_send\": true" : json += "\"mqtt_time_send\": false";
-        json += ",\"mqtt_time_interval\":" + String(mqtt_time_interval / 1000); // 60000 / 1000 = 30s
-        mqtt_status_send ? json += ",\"mqtt_status_send\": true" : json += ",\"mqtt_status_send\": false";
-    json += "},";
-    json += "\"code\": 1 ";
-    json += "}";
 
-    request->addInterestingHeader("API ESP32 Server");
-    request->send(200, dataType, json);
-}
-
-// -------------------------------------------------------------------
-// Parámetros de configuración MQTT
-// url: /api/status/mqtt
-// Método: GET
-// -------------------------------------------------------------------
-void handleApiStatusMQTT(AsyncWebServerRequest *request){
-    if (security){
-        if (!request->authenticate(device_user, device_password))
-            return request->requestAuthentication();
-    }
-
-    String json = "";
-    json = "{";
-    mqttClient.connected() ? json += "\"mqttStatus\": true" : json += "\"mqttStatus\": false";
-    json += "}";
-
-    request->addInterestingHeader("API ESP32 Server");
-    request->send(200, dataType, json);
-
-}
 // -------------------------------------------------------------------
 // Actualizar las configuraciones del MQTT Conexiones
 // url: /api/connection/mqtt

@@ -39,18 +39,6 @@ void initServer(){
     // -------------------------------------------------------------------
     server.on("/api/index",HTTP_GET, handleApiIndex);
     // -------------------------------------------------------------------
-    // Parámetros de configuración WiFi
-    // url: /api/connection/wifi
-    // Método: GET
-    // -------------------------------------------------------------------
-    server.on("/api/connection/wifi", HTTP_GET, handleApiWifi);
-    // -------------------------------------------------------------------
-    // Parámetros de configuración WiFi
-    // url: /api/status/wifi
-    // Método: GET
-    // -------------------------------------------------------------------    
-    server.on("/api/status/wifi", HTTP_GET, handleApistatusWifi);
-    // -------------------------------------------------------------------
     // Método POST actualizar configuraciones WiFi
     // url: /api/connection/wifi
     // Método: POST
@@ -65,18 +53,6 @@ void initServer(){
     // No solicite más de 3-5 segundos. \ ALT + 92
     // -------------------------------------------------------------------
     server.on("/api/connection/wifi-scan", HTTP_GET, handleApiWifiScan);
-    // -------------------------------------------------------------------
-    // Parámetros de configuración MQTT
-    // url: /api/connection/mqtt
-    // Método: GET
-    // -------------------------------------------------------------------
-    server.on("/api/connection/mqtt", HTTP_GET, handleApiMQTT);
-        // -------------------------------------------------------------------
-    // Parámetros de estatus MQTT
-    // url: /api/status/mqtt
-    // Método: GET
-    // -------------------------------------------------------------------
-    server.on("/api/status/mqtt", HTTP_GET, handleApiStatusMQTT);
     // -------------------------------------------------------------------
     // Actualizar las configuraciones del MQTT Conexiones
     // url: /api/connection/mqtt
