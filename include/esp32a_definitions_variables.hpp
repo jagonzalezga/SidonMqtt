@@ -112,11 +112,6 @@ boolean         mqtt_status_send;                       // Habilitar en envio de
 float           temp_cpu;                              // Temperatura del CPU en °C
 float           temperatureC, temperatureF;            // Temperatura en °C °F
 // -------------------------------------------------------------------
-// Zona Relay
-// ------------------------------------------------------------------- 
-bool            RELAY1_STATUS;                         // GPIO32 Estado del pin
-bool            RELAY2_STATUS;                         // GPIO33 Estado del pin
-// -------------------------------------------------------------------
 // Zona PWM
 // ------------------------------------------------------------------- 
 const int       freq = 1000;                           // frecuencia de trabajo 1kHz

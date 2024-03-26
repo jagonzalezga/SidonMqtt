@@ -854,21 +854,28 @@ void handleApiTemp(AsyncWebServerRequest *request) {
 // Método: GET
 // -------------------------------------------------------------------
 void handleApiGettiposidon(AsyncWebServerRequest *request){
-    // agregar el usuario y contraseña
     if(security){
         if(!request->authenticate(device_user, device_password))
             return request->requestAuthentication();
     }
 
-    String json = "";
-    json = "{";
-    json += "\"tiposidon\": \"" + String(tipoSidon) + "\"";
-    // Agregar el instructivo o documentación
+    String tipoSidonTexto;
+    switch(tipoSidon) {
+        case 0: tipoSidonTexto = "VITRINA_CONG"; break;
+        case 1: tipoSidonTexto = "VITRINA_CONS"; break;
+        case 2: tipoSidonTexto = "CUARTO_CONG"; break;
+        case 3: tipoSidonTexto = "CUARTO_CONS"; break;
+        case 4: tipoSidonTexto = "TIENDA"; break;
+        default: tipoSidonTexto = "Desconocido"; // Para valores no esperados
+    }
+
+    String json = "{";
+    json += "\"tiposidon\": \"" + tipoSidonTexto + "\",";
     json += "\"instructivo\": \"Los valores posibles para 'tiposidon' son: VITRINA_CONG = 0,  VITRINA_CONS = 1, CUARTO_CONG = 2, CUARTO_CONS = 3, TIENDA = 4.\"";
     json += "}";
 
     request->addInterestingHeader("API SIDON Server");
-    request->send(200, dataType, json);
+    request->send(200, "application/json", json);
 }
 
 // -------------------------------------------------------------------

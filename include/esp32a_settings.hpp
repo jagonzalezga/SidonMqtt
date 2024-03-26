@@ -82,15 +82,6 @@ boolean settingsRead(){
         mqtt_time_interval = jsonSettings["mqtt"]["mqtt_time_interval"];
         mqtt_status_send = jsonSettings["mqtt"]["mqtt_status_send"];
         // -------------------------------------------------------------------
-        // Relays settings.json
-        // -------------------------------------------------------------------
-        RELAY1_STATUS = jsonSettings["relay"]["RELAY1_STATUS"];
-        RELAY2_STATUS = jsonSettings["relay"]["RELAY2_STATUS"];
-        // -------------------------------------------------------------------
-        // Dimmer settings.json
-        // -------------------------------------------------------------------
-        dim = jsonSettings["dimmer"]["dim_value"];
-        // -------------------------------------------------------------------
         // constante corriente settings.json
         // -------------------------------------------------------------------
         constanteCorriente = jsonSettings["constantecorriente"]["constante"];
@@ -158,15 +149,6 @@ void settingsReset(){
     mqtt_time_send = true;
     mqtt_time_interval = 60000;//intervalo de envio de mensajes 60 segundos como ejemplo se puede modificar con la API
     mqtt_status_send = false;//esta variable habilita o deshabilita el envio de mensaje
-    // -------------------------------------------------------------------
-    // Relays settings.json
-    // -------------------------------------------------------------------        
-    RELAY1_STATUS = false;
-    RELAY2_STATUS = false;
-    // -------------------------------------------------------------------
-    // Dimmer settings.json
-    // -------------------------------------------------------------------
-    dim = 0;
     constanteCorriente  = 50;//constante para calculo de corriente esto lo define el sensor en este caso se debe de instalar un sensor de 50 amperes
     // -------------------------------------------------------------------
     // tipo settings.json
@@ -236,17 +218,6 @@ boolean settingsSave(){
         mqttObj["mqtt_time_send"] = mqtt_time_send;
         mqttObj["mqtt_time_interval"] = mqtt_time_interval;
         mqttObj["mqtt_status_send"] = mqtt_status_send; 
-        // -------------------------------------------------------------------
-        // Relays settings.json
-        // -------------------------------------------------------------------
-        JsonObject relayObj = jsonSettings.createNestedObject("relay");
-        relayObj["RELAY1_STATUS"] = RELAY1_STATUS;
-        relayObj["RELAY2_STATUS"] = RELAY2_STATUS;
-        // -------------------------------------------------------------------
-        // Dimmer settings.json
-        // -------------------------------------------------------------------
-        JsonObject dimmerObj = jsonSettings.createNestedObject("dimmer");
-        dimmerObj["dim_value"] = dim;
         // -------------------------------------------------------------------
         // constantecorriente settings.json
         // -------------------------------------------------------------------
