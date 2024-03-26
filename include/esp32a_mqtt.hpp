@@ -86,7 +86,7 @@ boolean mqtt_connect(){
         if(mqttClient.subscribe(topic, mqtt_qos)){
             log("INFO","Suscrito al tópico: " + String(topic));
         }else{
-            log("ERROR","MQTT - Falló la suscripción"); 
+            RGBnoMQTT(25, 125, 125, 200);
         }
 
     }

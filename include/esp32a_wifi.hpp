@@ -73,14 +73,12 @@ void startClient(){
         b++;
         log("WARNING","Intentando conexión WiFi ...");
         vTaskDelay(250);
-       
     }
     if(WiFi.status() == WL_CONNECTED){
         log("INFO","WiFi conectado (" + String(WiFi.RSSI()) + ") dBm IPv4 " + ipStr(WiFi.localIP()));
         // blinkRandomSingle(10, 100, WIFILED);
         wifi_app = WIFI_AP_STA;
         wifi_change = true;
-        localIP();
     } else {
         log("ERROR","WiFi no conectado");        
         // blinkRandomSingle(10, 100, WIFILED);
@@ -122,7 +120,7 @@ void wifiLoop(){
     unsigned long currentMillis = millis();
     if(WiFi.status() != WL_CONNECTED && (currentMillis - previousMillisWIFI >= intervalWIFI)){
         w++;
-        // blinkSingle(100, WIFILED);
+        RGBnoWiFi(100, 70, 45, 200);
         WiFi.disconnect(true);
         WiFi.reconnect();
         previousMillisWIFI = currentMillis;

@@ -287,28 +287,54 @@ void restore(String origin){
         ESP.restart();
     }    
 }
-// -------------------------------------------------------------------
-// Función para el dimmer dispositivo Global -> API, MQTT, WS
-// ejemplo: {"protocol": "API", "output": "Dimmer", "value": 0-100 }
-// -------------------------------------------------------------------
-void dimmer(String dimmer){
 
-    DynamicJsonDocument JsonDimmer(320);
-
-    deserializeJson(JsonDimmer, dimmer);  
-
-    log("INFO", "Comando enviado desde: "+JsonDimmer["protocol"].as<String>()+" <=> "+JsonDimmer["output"].as<String>()+" <=> "+JsonDimmer["value"].as<String>()+" %");
-
-    dim = JsonDimmer["value"].as<int>();
-
-    if( dim > 100 )  dim = 100;
-    if( dim < 0   )  dim = 0;
-
-    if(settingsSave())
-        ledcWrite(ledChannel, dim * 2.55); 
-        // multiplicamos por 2.55*100 para llegar a 255 que seria el maximo a 8bit = 3.3V
+void RGBnoWiFi(int speed, int _pinR, int _pinG, int _pinB){
+    if((milOld + speed) < millis()){
+        milOld = millis();
+        if(ioBlink == false){
+            analogWrite(CONNECTLEDR, _pinR);
+            analogWrite(CONNECTLEDG, _pinG);
+            analogWrite(CONNECTLEDB, _pinB);
+            ioBlink = true;
+        }else{
+            analogWrite(CONNECTLEDR, _pinR);
+            analogWrite(CONNECTLEDG, _pinG);
+            analogWrite(CONNECTLEDB, _pinB);
+            ioBlink = false;
+        }
+    }
 }
 
-void localIP(){
-    Serial.println(WiFi.localIP());
+void RGBnoMQTT(int speed, int _pinR, int _pinG, int _pinB){
+    if((milOld + speed) < millis()){
+        milOld = millis();
+        if(ioBlink == false){
+            analogWrite(CONNECTLEDR, _pinR);
+            analogWrite(CONNECTLEDG, _pinG);
+            analogWrite(CONNECTLEDB, _pinB);
+            ioBlink = true;
+        }else{
+            analogWrite(CONNECTLEDR, _pinR);
+            analogWrite(CONNECTLEDG, _pinG);
+            analogWrite(CONNECTLEDB, _pinB);
+            ioBlink = false;
+        }
+    }
+}
+
+void RGBMQTT(int speed, int _pinR, int _pinG, int _pinB){
+    if((milOld + speed) < millis()){
+        milOld = millis();
+        if(ioBlink == false){
+            analogWrite(CONNECTLEDR, _pinR);
+            analogWrite(CONNECTLEDG, _pinG);
+            analogWrite(CONNECTLEDB, _pinB);
+            ioBlink = true;
+        }else{
+            analogWrite(CONNECTLEDR, _pinR);
+            analogWrite(CONNECTLEDG, _pinG);
+            analogWrite(CONNECTLEDB, _pinB);
+            ioBlink = false;
+        }
+    }
 }

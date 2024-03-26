@@ -46,6 +46,11 @@ DallasTemperature sensors(&oneWire);
 
 
 void setup() {
+
+  pinMode(CONNECTLEDR,   OUTPUT);
+  pinMode(CONNECTLEDG, OUTPUT);
+  pinMode(CONNECTLEDB,  OUTPUT);
+
   Serial.begin(115200);
   log("INFO", "Iniciando el Setup");
   EEPROM.begin(256);                                          // Memoria EEPROM init 256 bytes
@@ -97,10 +102,6 @@ void loop() {
 
   if (WiFi.status() == WL_CONNECTED)
   {
-    textDraw();
-  }
-  else 
-  {
-    textDrawError();
+    RGBnoWiFi(100, 70, 45, 200);
   }
 }

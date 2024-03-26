@@ -4,8 +4,7 @@
 int RSSI;//Received Signal Strength Indicator
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-void initDisplay()
-{
+void initDisplay(){
 
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))   // Address 0x3C for 128x32
     { 
@@ -18,8 +17,7 @@ void initDisplay()
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-void textDraw()
-{
+void textDraw(){
     display.clearDisplay();
 
     display.setTextSize(0.3);
@@ -41,8 +39,7 @@ void textDraw()
     display.display();
 }
 
-void textDrawGeneric()
-{
+void textDrawGeneric(){
 
     display.clearDisplay();
 
@@ -61,8 +58,7 @@ void textDrawGeneric()
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-void textDrawError()
-{
+void textDrawError(){
 
     display.clearDisplay();
 
