@@ -389,7 +389,7 @@ void handleApiMQTT(AsyncWebServerRequest *request){
         json += ",\"mqtt_user\": \"" + String(mqtt_user) + "\"";
         json += ",\"mqtt_password\": \"""\"";
         mqtt_clean_sessions ? json += ",\"mqtt_clean_sessions\": true" : json += ",\"mqtt_clean_sessions\": false";
-        mqtt_time_send ? json += ",\"mqtt_time_send\": true" : json += "\"mqtt_time_send\": false";
+        mqtt_time_send ? json += ",\"mqtt_time_send\": true" : json += ",\"mqtt_time_send\": false";
         json += ",\"mqtt_time_interval\":" + String(mqtt_time_interval / 1000); // 60000 / 1000 = 30s
         mqtt_status_send ? json += ",\"mqtt_status_send\": true" : json += ",\"mqtt_status_send\": false";
     json += "},";
