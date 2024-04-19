@@ -1,3 +1,13 @@
+/* -------------------------------------------------------------------
+ ;* ECOSAT- ECOSAT 2024
+ ;* Correo: agonzalez@ecosat.com.mx
+ ;* Plataforma: SIDON 2.7
+ ;* Framework:  Arduino - Platformio - VSC
+ ;* Proyecto: Panel Administrativo 
+ ;* Nombre: SIDON 2.0
+ ;* Autor: Ing. ANDRE GONZALEZ
+ ;* -------------------------------------------------------------------
+*/
 int Gpio[5] = {4, 15, 13, 17, 16};
 int valoresDigitales[5];
 String pin[5] = {"SE1","SE2","SE3","SE4","SE5"};

@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------
- ;* ECOSAT- ECOSAT 2023
+ ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
  ;* Plataforma: SIDON 2.7
  ;* Framework:  Arduino - Platformio - VSC
@@ -7,7 +7,7 @@
  ;* Nombre: SIDON 2.0
  ;* Autor: Ing. ANDRE GONZALEZ
  ;* -------------------------------------------------------------------
-;*/
+*/
 
 #include <PubSubClient.h>//libreria encargada de la comunicacion mqtt
 
@@ -228,86 +228,45 @@ void mqtt_publishEst(String pin, int currentState){
 // -------------------------------------------------------------------
 // JSON con información del Dispositivo para envio por MQTT
 // ------------------------------------------------------------------- 
-String Json(){
+String Json() {
     String response;
     DynamicJsonDocument jsonDoc(3000);
-    JsonObject device[deviceCount];
+
+    // Llamadas a funciones de sensor
     GetTemperature();
     getCorrientes();
     SensorEstados();
-    // Crear JSON
-    jsonDoc["CodigoMDC"]          = DeviceID();//numero de serie del sidon 
-    //jsonDoc["deviceManufacturer"] = String(device_manufacturer);//FABRICANTE
-    jsonDoc["VersionFw"]    = device_fw_version;//FECHA DE CREACION/MODIFICACION DEL FIRMWARE
-    jsonDoc["VersionHw"]    = String(device_hw_version);//VERSION DEL HARDWARE
-    //jsonDoc["deviceSdk"]          = String(ESP.getSdkVersion());
-    jsonDoc["tiempoActivo"]   = longTimeStr(millis() / 1000);//tiempo activo desde que se encendio el sidon
+
+    // Configuración básica del JSON
+    jsonDoc["CodigoMDC"] = DeviceID();
+    jsonDoc["VersionFw"] = device_fw_version;
+    jsonDoc["VersionHw"] = device_hw_version;
+    jsonDoc["tiempoActivo"] = longTimeStr(millis() / 1000);
     JsonArray dataObj = jsonDoc.createNestedArray("lecturas");
-    // -------------------------------------------------------------------
-    //SECCION DE TEMPERATURAS 
-    // -------------------------------------------------------------------
-    for (int i = 0; i < deviceCount; i++)
-    {
-        device[i] = dataObj.createNestedObject();
-        device[i] ["Valor"]  = temperaturesC[i];
-        device[i] ["GPIO"]   = "IO27";
-        device[i] ["MAC"]    = macAddresses[i];
+
+    // Temperaturas
+    for (int i = 0; i < deviceCount; i++) {
+        JsonObject tempObj = dataObj.createNestedObject();
+        tempObj["Valor"] = temperaturesC[i];
+        tempObj["GPIO"] = "IO27";
+        tempObj["MAC"] = macAddresses[i];
     }
 
-    // -------------------------------------------------------------------
-    //SECCION DE CORRIENTES
-    // -------------------------------------------------------------------
-    JsonObject device8            = dataObj.createNestedObject();
-    device8["Valor"] = corrienteArray[0];
-    device8["GPIO"]  = Ax[0];
-    JsonObject device9            = dataObj.createNestedObject();
-    device9["Valor"] = corrienteArray[1];
-    device9["GPIO"]  = Ax[1] ;
-    JsonObject device10            = dataObj.createNestedObject();
-    device10["Valor"] = corrienteArray[2];
-    device10["GPIO"]  = Ax[2];
-    JsonObject device11            = dataObj.createNestedObject();
-    device11["Valor"] = corrienteArray[3];
-    device11["GPIO"]  = Ax[3];
-    currentIndex = 0;//variable que se usa en la parte de corrientes
-    // -------------------------------------------------------------------
-    //SECCION DE ESTADOS
-    // -------------------------------------------------------------------
-    JsonObject device12            = dataObj.createNestedObject();
-    device12["Valor"] = valoresDigitales[0];
-    device12["GPIO"]  = "SE1";
-    JsonObject device13            = dataObj.createNestedObject();
-    device13["Valor"] = valoresDigitales[1];
-    device13["GPIO"]  = "SE2";
-    JsonObject device14            = dataObj.createNestedObject();
-    device14["Valor"] = valoresDigitales[2];
-    device14["GPIO"]  = "SE3";
-    JsonObject device15            = dataObj.createNestedObject();
-    device15["Valor"] = valoresDigitales[3];
-    device15["GPIO"]  = "SE4";
-    JsonObject device16            = dataObj.createNestedObject();
-    device16["Valor"] = valoresDigitales[4];
-    device16["GPIO"]  = "SE5"; 
-       
-	// dataObj["deviceRamAvailable"] = ESP.getFreeHeap();
-	// dataObj["deviceRamSizeKb"]    = ESP.getHeapSize();
-    // dataObj["deviceRelay1Status"] = RELAY1_STATUS ? true : false;
-	// dataObj["deviceRelay2Status"] = RELAY2_STATUS ? true : false;
-	// dataObj["deviceDimmer"]       = dim;
-	// dataObj["deviceCpuTemp"]      = TempCPUValue();
-	// dataObj["deviceDS18B20TempC"] = temperatureC;
-    // dataObj["deviceDS18B20TempF"] = temperatureF;
-    
-    // dataObj["deviceSpiffsUsed"]   = String(SPIFFS.usedBytes());
-    // dataObj["deviceCpuClock"]     = String(getCpuFrequencyMhz());
-    // dataObj["deviceFlashSize"]    = String(ESP.getFlashChipSize() / (1024.0 * 1024), 2);
-    // dataObj["deviceRestartS"]     = String(device_restart);
-	// dataObj["mqttStatus"]         = mqttClient.connected() ? true : false;
-	// dataObj["mqttServer"]         = mqttClient.connected() ? F(mqtt_server) : F("server not connected");
-	// dataObj["wifiStatus"]         = WiFi.status() == WL_CONNECTED ? true : false;
-	// dataObj["wifiRssiStatus"]     = WiFi.status() == WL_CONNECTED ? WiFi.RSSI() : 0;
-	// dataObj["wifiQuality"]        = WiFi.status() == WL_CONNECTED ? getRSSIasQuality(WiFi.RSSI()) : 0;
-    
+    // Corrientes
+    for (int i = 0; i < 4; i++) {
+        JsonObject currentObj = dataObj.createNestedObject();
+        currentObj["Valor"] = corrienteArray[i];
+        currentObj["GPIO"] = Ax[i];
+    }
+
+    // Estados Digitales
+    for (int i = 0; i < 5; i++) {
+        JsonObject stateObj = dataObj.createNestedObject();
+        stateObj["Valor"] = valoresDigitales[i];
+        stateObj["GPIO"] = String("SE") + (i + 1);
+    }
+
+    // Serialización y limpieza
     serializeJson(jsonDoc, response);
     jsonDoc.clear();
     return response;

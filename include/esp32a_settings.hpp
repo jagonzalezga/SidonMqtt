@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------
- ;* ECOSAT- ECOSAT 2023
+ ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
  ;* Plataforma: SIDON 2.2
  ;* Framework:  Arduino - Platformio - VSC
