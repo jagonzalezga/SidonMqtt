@@ -178,6 +178,13 @@ void initServer(){
     // Método: GET
     // -------------------------------------------------------------------
     server.on("/api/connection/temp", HTTP_GET, handleApiTemp);
+    // -------------------------------------------------------------------
+    // request de Sensores de corriente
+    // url: /api/connection/temp
+    // Método: GET
+    // -------------------------------------------------------------------
+    server.on("/api/connection/corrientes", HTTP_GET, handleApiGetCorrientes);
+
     // manejador de error 404
     server.onNotFound([](AsyncWebServerRequest *request) {
         if (request->method() == HTTP_OPTIONS) {

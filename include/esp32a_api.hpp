@@ -844,3 +844,30 @@ void handleApiTemp(AsyncWebServerRequest *request) {
     request->send(200, dataType, (deviceCount != 0 ? jsonString : "No se detectan sensores"));
 
 }
+
+// -------------------------------------------------------------------
+// Manejo de request sensores de corrientes
+// url: /api/connection/corrientes
+// Método: GET
+// -------------------------------------------------------------------
+void handleApiGetCorrientes(AsyncWebServerRequest *request) {
+    if (security) {  // Asume que `security` es una variable booleana definida globalmente
+        if (!request->authenticate(device_user, device_password))
+            return request->requestAuthentication();
+    }
+
+    getCorrientes();
+    // Crear un documento JSON con los datos de corrientes
+    DynamicJsonDocument doc(1024);
+    JsonArray data = doc.createNestedArray("corrientes");
+
+    for (int i = 0; i < MAX_NUM_VALUES; i++) {
+        JsonObject elem = data.createNestedObject();
+        elem["GPIO"] = Ax[i];
+        elem["value"] = corrienteArray[i];
+    }
+
+    String response;
+    serializeJson(doc, response);
+    request->send(200, "application/json", response);  // Enviar respuesta JSON
+}
