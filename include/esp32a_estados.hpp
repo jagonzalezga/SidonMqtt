@@ -8,14 +8,14 @@
  ;* Autor: Ing. ANDRE GONZALEZ
  ;* -------------------------------------------------------------------
 */
-int Gpio[5] = {4, 15, 13, 17, 16};
+int Gpio[5] = {5,17,16,4};
 int valoresDigitales[5];
-String pin[5] = {"SE1","SE2","SE3","SE4","SE5"};
-const int numPins = 5;
+String pin[5] = {"SE1","SE2","SE3","SE4"};
+const int numPins = 4;
 int lastState[numPins];
 
 void SensorEstados(){
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < numPins; i++) {
     valoresDigitales[i] = digitalRead(Gpio[i]); // Leer el estado digital de cada pin
     lastState[i] = digitalRead(Gpio[i]);
   }
@@ -23,7 +23,7 @@ void SensorEstados(){
 
 void initSensorEstados()
 {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < numPins; i++) {
     pinMode(Gpio[i], INPUT); // Establecer los pines como entradas digitales
   }
 }
