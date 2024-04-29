@@ -217,6 +217,7 @@ void mqtt_publish(){
     mqttClient.publish(topic.c_str(), mqtt_data.c_str(), mqtt_retain);
     mqtt_data = "";
 }
+
 void mqtt_publishEst(String pin, int currentState){
     String topic = PathMqttTopic("EST");
     log("MQTT", topic);
@@ -252,11 +253,22 @@ String Json() {
         tempObj["MAC"] = macAddresses[i];
     }
 
-    // Corrientes
+    // Corrientes adc1
+    if (activeADC1) {
     for (int i = 0; i < 4; i++) {
         JsonObject currentObj = dataObj.createNestedObject();
         currentObj["Valor"] = corrienteArray[i];
         currentObj["GPIO"] = Ax[i];
+    }
+    }
+
+    // Corrientes adc2
+    if (activeADC2) {
+    for (int i = 4; i < 8; i++) {
+        JsonObject currentObj = dataObj.createNestedObject();
+        currentObj["Valor"] = corrienteArray[i];
+        currentObj["GPIO"] = Ax[i];
+    }
     }
 
     // Estados Digitales

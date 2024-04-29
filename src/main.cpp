@@ -84,7 +84,7 @@ void setup() {
   // Crear Tarea Reconexión MQTT
   xTaskCreate(TaskMqttReconnect, "TaskMqttReconnect", 1024*6, NULL, 2, NULL);
   // LED MQTT Task
-  // xTaskCreate( TaskMQTTLed, "TaskMQTTLed", 2048, NULL, 1, NULL);
+  xTaskCreate( TaskMQTTLed, "TaskMQTTLed", 2048, NULL, 1, NULL);
   // SENSORES DE ESTADOS TASK
   xTaskCreate( TaskEstados, "TaskEstados", 2048, NULL, 1, NULL);
   initDisplay();
