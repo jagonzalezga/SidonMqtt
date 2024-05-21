@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.7
+ ;* Plataforma: SIDON 2.9.0
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -177,7 +177,7 @@ void initServer(){
     // url: /api/connection/temp
     // Método: GET
     // -------------------------------------------------------------------
-    server.on("/api/connection/temp", HTTP_GET, handleApiTemp);
+    server.on("/api/connection/sensores", HTTP_GET, handleApiSensores);
     // -------------------------------------------------------------------
     // request de Sensores de corriente
     // url: /api/connection/temp

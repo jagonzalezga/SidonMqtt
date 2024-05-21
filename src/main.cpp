@@ -10,6 +10,7 @@
 */
 
 #include <Arduino.h>
+#include <Update.h>
 #include <EEPROM.h>
 #include <SPIFFS.h>
 #include <WiFi.h>

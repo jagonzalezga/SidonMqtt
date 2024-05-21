@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.7
+ ;* Plataforma: SIDON 2.9.0
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -30,11 +30,11 @@ float corrienteArray[TOTAL_CHANNELS]; // Array para almacenar los valores de cor
 void initADS() {
     ads.setGain(GAIN_TWOTHIRDS);
     ads.begin(0x48);
-    Serial.println("ADC1 activado");
+    log("INFO","ADC1 activado");
     
     ads2.setGain(GAIN_TWOTHIRDS);
     ads2.begin(0x49);
-    Serial.println("ADC2 activado");
+    log("INFO","ADC2 activado");
 }
 
 // Función para leer el valor de cualquier canal como si fueran uno solo
@@ -59,7 +59,7 @@ void processChannel(int channel) {
     float corriente = getCurrent(positionAds, Valorminin, Valormaxin, ValorminCorriente, constanteCorriente);
     corrienteArray[channel] = corriente;
 
-    Serial.print("Corriente en canal ");
+    Serial.print("[INFO] Corriente en canal ");
     Serial.print(channel);
     Serial.print(": ");
     Serial.println(corriente);

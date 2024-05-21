@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.7
+ ;* Plataforma: SIDON 2.9.0
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -306,3 +306,7 @@ void dimmer(String dimmer){
         ledcWrite(ledChannel, dim * 2.55); 
         // multiplicamos por 2.55*100 para llegar a 255 que seria el maximo a 8bit = 3.3V
 }
+
+// -------------------------------------------------------------------
+// Función para actualizar firmware a tarves de MQTT
+// -------------------------------------------------------------------

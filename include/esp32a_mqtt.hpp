@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.7
+ ;* Plataforma: SIDON 2.9.0
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -33,7 +33,10 @@ void mqtt_publish();
 String Json();
 void mqttloop();
 String JsonEST(String pin_,int currentState_);
-
+void handleCommand(byte* payload, unsigned int length);
+void handleGetStatus(DynamicJsonDocument& doc);
+void handleRestart(DynamicJsonDocument& doc);
+void handleFirmwareUpdate(byte* payload, unsigned int length);
 // -------------------------------------------------------------------
 // MQTT Connect
 // -------------------------------------------------------------------
@@ -86,8 +89,17 @@ boolean mqtt_connect(){
         if(mqttClient.subscribe(topic, mqtt_qos)){
             log("INFO","Suscrito al tópico: " + String(topic));
         }else{
-            log("ERROR","MQTT - Falló la suscripción"); 
+            log("ERROR","MQTT - Falló la suscripción al tópico 'command'"); 
         }
+
+        String topic_firmware = PathMqttTopic_sub("firmware");
+        topic_firmware.toCharArray(topic, 150);
+        if (mqttClient.subscribe(topic, mqtt_qos)) {
+            log("INFO", "Suscrito al tópico: " + String(topic));
+        } else {
+            log("ERROR", "MQTT - Falló la suscripción al tópico 'firmware'");
+        }
+
 
     }
     else
@@ -100,111 +112,115 @@ boolean mqtt_connect(){
 // -------------------------------------------------------------------
 // Manejo de los Mensajes Entrantes --- controlar los relays
 // -------------------------------------------------------------------
-void callback(char *topic, byte *payload, unsigned int length){
-  // Define el tamaño adecuado para el documento JSON
-  const size_t capacity = length + 50; // Ajusta el tamaño según tus necesidades
+void callback(char* topic, byte* payload, unsigned int length) {
+    String str_topic = String(topic);
 
-  // Crea un DynamicJsonDocument con el tamaño adecuado
-  DynamicJsonDocument doc(capacity);
+    if (str_topic == "Sidon/command") {
+        // Manejar comandos JSON
+        handleCommand(payload, length);
+    } else if (str_topic == "Sidon/firmware") {
+        // Manejar actualización de firmware binaria
+        handleFirmwareUpdate(payload, length);
+    } else {
+        log("WARNING", "Tópico desconocido: " + str_topic);
+    }
+}
 
-  // Analiza el payload MQTT en el documento JSON
-  DeserializationError error = deserializeJson(doc, payload, length);
+void handleCommand(byte* payload, unsigned int length) {
+    // Imprime el payload recibido para depuración
+    Serial.print("Payload recibido: ");
+    for (unsigned int i = 0; i < length; i++) {
+        Serial.print((char)payload[i]);
+    }
+    Serial.println();
 
-  // Verifica si hubo un error al analizar el JSON
-  if (error) {
-    Serial.print(F("Error al analizar JSON: "));
-    Serial.println(error.c_str());
-    return;
-  }
+    // Define el tamaño adecuado para el documento JSON
+    const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(1) + 100; // Ajusta el tamaño según tus necesidades
+    DynamicJsonDocument doc(capacity);
 
-// Verifica si el valor de "command" es igual a "getStatus"
-if (doc["command"] == "getStatus") 
-{
-    // Realiza la acción que deseas cuando el comando es "getStatus"
-    Serial.println("Comando getStatus recibido");
+    // Analiza el payload MQTT en el documento JSON
+    DeserializationError error = deserializeJson(doc, payload, length);
+
+    // Verifica si hubo un error al analizar el JSON
+    if (error) {
+        Serial.print(F("[Error] al analizar JSON: "));
+        Serial.println(error.c_str());
+        return;
+    }
+
+    // Verifica el comando en el JSON
+    const char* command = doc["command"];
+
+    if (strcmp(command, "getStatus") == 0) {
+        handleGetStatus(doc);
+    } else if (strcmp(command, "restart") == 0) {
+        handleRestart(doc);
+    } else {
+        Serial.println("Comando no válido.");
+    }
+}
+
+void handleGetStatus(DynamicJsonDocument& doc) {
+    log("INFO", "Comando getStatus recibido");
     // Verifica si el JSON contiene la clave "devices"
-    if (doc.containsKey("devices")) 
-    {
+    if (doc.containsKey("devices")) {
         JsonArray devices = doc["devices"].as<JsonArray>();
-        for (const JsonVariant& device : devices) 
-        {  //Comprueba si devices contiene el mismo DeviceID que el dispositivo o Comprueba si "devices" contiene solo un elemento con valor "*"
+        for (const JsonVariant& device : devices) {
+            // Comprueba si devices contiene el mismo DeviceID que el dispositivo o si devices contiene "*"
             if ((device.as<String>() == DeviceID()) || (devices.size() == 1 && devices[0] == "*")) {
                 // Realiza la acción que deseas cuando se encuentra una coincidencia
-                Serial.println("Se encontró una coincidencia con  el deviceid.");
-                // Puedes realizar la acción deseada aquí
+                log("INFO", "Se encontró una coincidencia con el deviceid.");
                 mqtt_publish();
             }
         }
-    }
-    else 
-    {
-        Serial.println("No se encontró la clave 'devices' en el JSON.");
+    } else {
+        log("INFO", "No se encontró la clave 'devices' en el JSON.");
     }
 }
-else if (doc["command"] == "restart")
-{
-    // Realiza la acción que deseas cuando el comando es "getStatus"
-    Serial.println("Comando restart recibido");
+
+void handleRestart(DynamicJsonDocument& doc) {
+    log("INFO", "Comando restart recibido");
     // Verifica si el JSON contiene la clave "devices"
-    if (doc.containsKey("devices")) 
-    {
+    if (doc.containsKey("devices")) {
         JsonArray devices = doc["devices"].as<JsonArray>();
-        for (const JsonVariant& device : devices) 
-        {  //Comprueba si devices contiene el mismo DeviceID que el dispositivo o Comprueba si "devices" contiene solo un elemento con valor "*"
+        for (const JsonVariant& device : devices) {
+            // Comprueba si devices contiene el mismo DeviceID que el dispositivo o si devices contiene "*"
             if ((device.as<String>() == DeviceID()) || (devices.size() == 1 && devices[0] == "*")) {
                 // Realiza la acción que deseas cuando se encuentra una coincidencia
-                Serial.println("Se encontró una coincidencia con  el deviceid.");
-                Serial.println("Reseteando sidon");
-                vTaskDelay(3000/portTICK_PERIOD_MS);
+                log("INFO", "Se encontró una coincidencia con el deviceid.");
+                log("INFO", "Reseteando sidon");
+                vTaskDelay(3000 / portTICK_PERIOD_MS);
                 ESP.restart();
             }
         }
-    }
-    else 
-    {
-        Serial.println("No se encontró la clave 'devices' en el JSON.");
+    } else {
+        log("INFO", "No se encontró la clave 'devices' en el JSON.");
     }
 }
-else 
-{
-    Serial.println("Comando no válido.");
-}
- // Limpia el documento JSON si es necesario
-  doc.clear();
+// -------------------------------------------------------------------
+// Función para actualizar firmware a tarves de MQTT
+// -------------------------------------------------------------------
+void handleFirmwareUpdate(byte* payload, unsigned int length) {
+    log("INFO", "Iniciando actualización de firmware...");
 
-//   // Ahora puedes acceder a los datos del JSON de manera dinámica
-//   //const char *value = doc["command"]; // Reemplaza "clave" por la clave que necesites
-//   //Serial.println(value);
-
-
-//   // Comprueba si el valor de "command" es igual a "getStatus"
-//   if (doc["command"] == "getStatus") {
-//     // Realiza la acción que deseas cuando el comando es "getStatus"
-//     // Por ejemplo, puedes enviar una respuesta MQTT o realizar alguna operación específica.
-//     Serial.println("Comando getStatus recibido");
-//     if
-//     mqtt_publish();
-    
-//     // Puedes acceder a otros campos del JSON si es necesario, por ejemplo, "devices".
-//     // const char *devices = doc["devices"];
-  
-    // String command = "";
-    // String str_topic(topic);
-
-    // for(int16_t i = 0; i < length; i++){
-    //     command += (char)payload[i];
-    //     // TODO: pestañeo de led MQTT
-
-    // }   
-
-    // command.trim();
-    // log("INFO","MQTT Tópico  --> " + str_topic);
-    // log("INFO","MQTT Mensaje --> " + command);
-    
-    // // TODO: responder al MQTT el estado de los relays
-    // if(command=="")
-    // OnOffRelays(command);
-
+    if (Update.begin(length)) {
+        size_t written = Update.write(payload, length);
+        if (written == length) {
+            log("INFO", "Escribiendo firmware...");
+        } else {
+            log("ERROR", "Falló la escritura del firmware");
+            Update.end();
+            return;
+        }
+        if (Update.end(true)) {
+            log("INFO", "Actualización completa");
+            ESP.restart();
+        } else {
+            log("ERROR", "Error en la actualización: " + String(Update.getError()));
+        }
+    } else {
+        log("ERROR", "Error al iniciar la actualización: " + String(Update.getError()));
+    }
 }
 // -------------------------------------------------------------------
 // Manejo de los Mensajes Salientes y mensajes de sensores de estado

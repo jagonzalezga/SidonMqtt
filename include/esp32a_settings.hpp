@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.2
+ ;* Plataforma: SIDON 2.9.0
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -124,9 +124,9 @@ void settingsReset(){
     wifi_ip_static = false; // false dhcp true fijo
     strlcpy(wifi_ipv4, "192.168.30.150", sizeof(wifi_ipv4));
     strlcpy(wifi_subnet, "255.255.255.0", sizeof(wifi_subnet));
-    strlcpy(wifi_gateway, "192.168.30.1", sizeof(wifi_gateway));
-    strlcpy(wifi_dns_primary, "8.8.8.8", sizeof(wifi_dns_primary));
-    strlcpy(wifi_dns_secondary, "8.8.4.4", sizeof(wifi_dns_secondary));
+    //strlcpy(wifi_gateway, "255.255.255.0", sizeof(wifi_gateway));
+    //strlcpy(wifi_dns_primary, "8.8.8.8", sizeof(wifi_dns_primary));
+    //strlcpy(wifi_dns_secondary, "8.8.4.4", sizeof(wifi_dns_secondary));
     // -------------------------------------------------------------------
     // WIFI AP settings.json
     // -------------------------------------------------------------------    

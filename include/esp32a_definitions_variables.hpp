@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------
  ;* ECOSAT- ECOSAT 2024
  ;* Correo: agonzalez@ecosat.com.mx
- ;* Plataforma: SIDON 2.7
+ ;* Plataforma: SIDON 2.9.0
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
  ;* Nombre: SIDON 2.0
@@ -33,8 +33,8 @@ String device_fw_version = ESCAPEQUOTE(BUILD_TAG);
 // -------------------------------------------------------------------
 // Version de Hardware y Fabricante
 // -------------------------------------------------------------------
-#define device_hw_version   "2.7"    // Versión del hardware
-#define device_manufacturer "ADM"        // Fabricante
+#define device_hw_version   "2.9.0"    // Versión del hardware
+#define device_manufacturer "ECOSAT ADM"        // Fabricante
 // -------------------------------------------------------------------
 // Zona configuración Dispositivo
 // ------------------------------------------------------------------- 
