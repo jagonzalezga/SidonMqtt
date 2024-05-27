@@ -4,7 +4,7 @@
  ;* Plataforma: SIDON 2.7
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
- ;* Nombre: SIDON 2.0
+ ;* Nombre: SIDON SENSE
  ;* Autor: Ing. ANDRE GONZALEZ
  ;* -------------------------------------------------------------------
 ;*/
@@ -19,11 +19,11 @@ IPAddress ap_subnet(255,255,255,0);
 // WiFi.mode(WIFI_AP)       - access point mode: stations can connect to the ESP32
 // WiFi.mode(WIFI_AP_STA)   - access point and a station connected to another access point
 
-bool wifi_change = false;//detectar cambios en la conexion 
+bool wifi_change = false;
 
-unsigned long previousMillisWIFI = 0;//temporizacion modo wifi
-unsigned long previousMillisAP = 0;//temporizacion modo AP
-unsigned long intervalWIFI = 120000; // 2 minutos
+unsigned long previousMillisWIFI = 0;
+unsigned long previousMillisAP = 0;
+unsigned long intervalWIFI = 30000; // 30 Segundos
 
 // e.j http://adminesp32.local
 const char *esp_hostname = device_name;
@@ -44,7 +44,6 @@ void startAP(){
     log("INFO","Iniciando Modo AP ...");
     WiFi.mode(WIFI_STA);
     WiFi.disconnect(true, true);
-    statusAP = true;
     vTaskDelay(20); 
     WiFi.softAPConfig(ap_IPv4, ap_IPv4, ap_subnet);
     WiFi.hostname(esp_hostname);
@@ -59,7 +58,7 @@ void startAP(){
 // -------------------------------------------------------------------
 void startClient(){
     log("INFO","Iniciando Modo Estación");
-    WiFi.mode(WIFI_AP_STA);
+    WiFi.mode(WIFI_STA);
     if(wifi_ip_static){
         if(!WiFi.config(CharToIP(wifi_ipv4), CharToIP(wifi_gateway), CharToIP(wifi_subnet), CharToIP(wifi_dns_primary), CharToIP(wifi_dns_secondary))){
             log("ERROR", "Falló la configuración en Modo Estación");
@@ -73,16 +72,14 @@ void startClient(){
         b++;
         log("WARNING","Intentando conexión WiFi ...");
         vTaskDelay(250);
-       
+
     }
     if(WiFi.status() == WL_CONNECTED){
         log("INFO","WiFi conectado (" + String(WiFi.RSSI()) + ") dBm IPv4 " + ipStr(WiFi.localIP()));
-        // blinkRandomSingle(10, 100, WIFILED);
-        wifi_app = WIFI_AP_STA;
+        wifi_app = WIFI_STA;
         wifi_change = true;
     }else{
         log("ERROR","WiFi no conectado");        
-        // blinkRandomSingle(10, 100, WIFILED);
         wifi_change = true;
         startAP();
     }
@@ -92,23 +89,20 @@ void startClient(){
 // -------------------------------------------------------------------
 void wifi_setup(){
     WiFi.disconnect(true);
-    // 1) Si esta activo el Modo Cliente TRUE
+    // 1) Si esta activo el Modo Cliente
     if(wifi_mode){
         startClient();
         if(WiFi.status() == WL_CONNECTED){
             log("INFO","WiFI Modo Estación");
         }
     }else{
-    // 2) Caso contrario en Modo AP FALSE
+    // 2) Caso contrario en Modo AP
         startAP();
         log("INFO","WiFi en Modo AP");
     }
-    // Iniciar hostname broadcast en modo STA o AP 
-    if(wifi_app == WIFI_STA || wifi_app == WIFI_AP || wifi_app == WIFI_AP_STA)
-    {
-        if(MDNS.begin(esp_hostname))
-        {
-            log("INFO","TCP server started");
+    // Iniciar hostname broadcast en modo STA o AP
+    if(wifi_app == WIFI_STA || wifi_app == WIFI_AP){
+        if(MDNS.begin(esp_hostname)){
             MDNS.addService("http", "tcp", 80);
         }
     }
@@ -121,7 +115,6 @@ void wifiLoop(){
     unsigned long currentMillis = millis();
     if(WiFi.status() != WL_CONNECTED && (currentMillis - previousMillisWIFI >= intervalWIFI)){
         w++;
-        // blinkSingle(100, WIFILED);
         WiFi.disconnect(true);
         WiFi.reconnect();
         previousMillisWIFI = currentMillis;
@@ -134,8 +127,7 @@ void wifiLoop(){
         }else{
             log("WARNING","SSID " + String(wifi_ssid) + " desconectado ");
         }
-    }else{
-    //    blinkSingleAsy(10, 500, WIFILED); 
+    }else{ 
     }
 }
 // -------------------------------------------------------------------
@@ -143,7 +135,6 @@ void wifiLoop(){
 // -------------------------------------------------------------------
 byte a = 0;
 void wifiAPLoop(){
-    // blinkSingleAsy(50, 1000, WIFILED);
     dnsServer.processNextRequest(); // Portal captivo DNS
     unsigned long currentMillis = millis();
     if((currentMillis - previousMillisAP >= intervalWIFI) && wifi_change){
@@ -158,4 +149,5 @@ void wifiAPLoop(){
         }
     }
 }
+
 

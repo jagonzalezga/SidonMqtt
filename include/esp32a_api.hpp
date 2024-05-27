@@ -4,7 +4,7 @@
  ;* Plataforma: SIDON 2.7
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
- ;* Nombre: SIDON 2.0
+ ;* Nombre: SIDON SENSE
  ;* Autor: Ing. ANDRE GONZALEZ
  ;* -------------------------------------------------------------------
 */
@@ -814,34 +814,19 @@ void handleApiPostconstantecorriente(AsyncWebServerRequest *request, uint8_t *da
 // url: /api/connection/temp
 // Método: POST
 // -------------------------------------------------------------------
-void handleApiTemp(AsyncWebServerRequest *request) {
+void handleApiSensores(AsyncWebServerRequest *request) {
     if (security) {
         if (!request->authenticate(device_user, device_password))
             return request->requestAuthentication();
     } 
 
-    InitDigitalTemperature();
-    
-    // Imprimir el valor de deviceCount para verificar si se detectan los sensores correctamente
-    Serial.print("Número de sensores detectados: ");
-    Serial.println(deviceCount);
 
-    DynamicJsonDocument jsonDoc(1024);
-    // Crear un array JSON para almacenar las direcciones de los sensores
-    JsonArray sensorArray = jsonDoc.to<JsonArray>();
 
-    // Agregar las direcciones de los sensores al array JSON
-    for (int i = 0; i < deviceCount; i++) {
-        JsonObject sensor = sensorArray.createNestedObject();
-        sensor["GPIO"] = "IO27";
-        sensor["MAC"] = macAddresses[i];
-    }
-
-    // Enviar la respuesta JSON con las direcciones de los sensores
-    String jsonString;
-    serializeJson(sensorArray, jsonString);
+    String API_data = Json();
+    //log("INFO",API_data);
     request->addInterestingHeader("API ESP32 Server");
-    request->send(200, dataType, (deviceCount != 0 ? jsonString : "No se detectan sensores"));
+    request->send(200, dataType,API_data );
+    API_data ="";
 
 }
 

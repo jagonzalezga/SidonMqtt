@@ -4,7 +4,7 @@
  ;* Plataforma: SIDON 2.7
  ;* Framework:  Arduino - Platformio - VSC
  ;* Proyecto: Panel Administrativo 
- ;* Nombre: SIDON 2.0
+ ;* Nombre: SIDON SENSE
  ;* Autor: Ing. ANDRE GONZALEZ
  ;* -------------------------------------------------------------------
 */
@@ -177,7 +177,7 @@ void initServer(){
     // url: /api/connection/temp
     // Método: GET
     // -------------------------------------------------------------------
-    server.on("/api/connection/temp", HTTP_GET, handleApiTemp);
+    server.on("/api/connection/sensores", HTTP_GET, handleApiSensores);
     // -------------------------------------------------------------------
     // request de Sensores de corriente
     // url: /api/connection/temp

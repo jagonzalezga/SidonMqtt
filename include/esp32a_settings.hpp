@@ -109,7 +109,7 @@ boolean settingsRead(){
 // -------------------------------------------------------------------
 void settingsReset(){
     // -------------------------------------------------------------------
-    // Dispositivo settings.json
+    // Credenciales de APIREST
     // -------------------------------------------------------------------
     strlcpy(device_id, DeviceID().c_str(), sizeof(device_id));   // ESP32DC15B80C703E
     strlcpy(device_name, extractNumbers(DeviceID()).c_str(), sizeof(device_name));
@@ -119,12 +119,12 @@ void settingsReset(){
     // WIFI Cliente settings.json
     // -------------------------------------------------------------------
     wifi_mode = false; // false = AP true = cliente//********
-    strlcpy(wifi_ssid, "Sidon", sizeof(wifi_ssid));
-    strlcpy(wifi_password, "3c0s4t201*", sizeof(wifi_password));
+    strlcpy(wifi_ssid, "Red WiFi", sizeof(wifi_ssid));
+    strlcpy(wifi_password, "Pass WiFi", sizeof(wifi_password));
     wifi_ip_static = false; // false dhcp true fijo
     strlcpy(wifi_ipv4, "192.168.30.150", sizeof(wifi_ipv4));
     strlcpy(wifi_subnet, "255.255.255.0", sizeof(wifi_subnet));
-    strlcpy(wifi_gateway, "192.168.30.1", sizeof(wifi_gateway));
+    strlcpy(wifi_gateway, "255.255.255.0", sizeof(wifi_gateway));
     strlcpy(wifi_dns_primary, "8.8.8.8", sizeof(wifi_dns_primary));
     strlcpy(wifi_dns_secondary, "8.8.4.4", sizeof(wifi_dns_secondary));
     // -------------------------------------------------------------------
@@ -138,13 +138,13 @@ void settingsReset(){
     // -------------------------------------------------------------------
     // MQTT settings.json
     // -------------------------------------------------------------------
-    mqtt_enable = false;//********
-    strlcpy(mqtt_server, "192.168.200.154", sizeof(mqtt_server));
+    mqtt_enable = true;//********
+    strlcpy(mqtt_server, "192.168.4.1", sizeof(mqtt_server));
     mqtt_port = 1883;//puerto del broker mqtt
     mqtt_retain = false;
     mqtt_qos = 1;//quiality of service
     strlcpy(mqtt_id, DeviceID().c_str(), sizeof(mqtt_id));
-    strlcpy(mqtt_user, "Sidon", sizeof(mqtt_user));
+    strlcpy(mqtt_user, "172.17.141.120", sizeof(mqtt_user));
     strlcpy(mqtt_password, "3c0s4t201*", sizeof(mqtt_password));
     mqtt_clean_sessions = true;
     strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
