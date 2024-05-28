@@ -72,7 +72,7 @@ boolean mqtt_connect(){
         log("debug", mqtt_willTopic);
         String deviceID = DeviceID();
         // Construir la cadena JSON utilizando std::string
-        String jsonMessage = "{\"connected\": true,\"Device\":" + deviceID + "}";
+        String jsonMessage = "{\"connected\": true, \"Device\": \"" + String(deviceID) + "\", \"ipDevice\": \"" + ipStr(WiFi.localIP()) + "\"}";
         mqttClient.publish(mqtt_willTopic,jsonMessage.c_str(), mqtt_retain );
         jsonMessage = "";
 
